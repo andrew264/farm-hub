@@ -1,2 +1,6 @@
 tensorflow
 keras
+jupyter
+notebook
+numpy
+matplotlib
