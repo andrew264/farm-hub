@@ -11,8 +11,8 @@ print(f"Global dtype policy: {tf.keras.mixed_precision.global_policy()}")
 
 train_data = './datasets/images/train'
 val_data = './datasets/images/valid'
-image_size = (512, 512)
-batch_size = 128
+image_size = (256, 256)
+batch_size = 256
 
 if __name__ == '__main__':
     train_dataset = tf.keras.preprocessing.image_dataset_from_directory(
@@ -23,6 +23,7 @@ if __name__ == '__main__':
     val_dataset = tf.keras.preprocessing.image_dataset_from_directory(
         val_data,
         image_size=image_size,
+        batch_size=batch_size,
     )
 
     class_names = train_dataset.class_names
