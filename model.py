@@ -9,9 +9,10 @@ class EffNet(tf.keras.Model):
             include_top=False, weights='imagenet'
         )
         self.avg_pool = tf.keras.layers.GlobalAveragePooling2D()
-        self.dense1 = tf.keras.layers.Dense(512, activation='relu')
-        self.dense2 = tf.keras.layers.Dense(128, activation='relu')
-        self.dense3 = tf.keras.layers.Dense(self.num_classes, activation='softmax')
+        self.final_layer = tf.keras.layers.Dense(self.num_classes, activation='softmax')
+        intermediate_size = (num_classes + 255) // 256 * 256
+        self.intermediate_layer_2 = tf.keras.layers.Dense(intermediate_size, activation='relu')
+        self.intermediate_layer_1 = tf.keras.layers.Dense(intermediate_size * 2, activation='relu')
 
         # freeze model head
         self.model_head.trainable = False
@@ -19,9 +20,9 @@ class EffNet(tf.keras.Model):
     def call(self, inputs, training=None, mask=None):
         x = self.model_head(inputs)
         x = self.avg_pool(x)
-        x = self.dense1(x)
-        x = self.dense2(x)
-        x = self.dense3(x)
+        x = self.intermediate_layer_1(x)
+        x = self.intermediate_layer_2(x)
+        x = self.final_layer(x)
         return x
 
     def get_config(self):
