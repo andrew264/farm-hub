@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Farm-HUB</title>
+</head>
+<body>
+<div id="chat-container">
+    <ul id="chat-messages">
+        {% for user, content, image in chat_messages %}
+        <li class="{{ user }}">{{ content }}</li>
+        {% if image != '' %}
+        <li class="{{ user }}">
+            <img style="max-width: 300px; max-height: 300px"
+                 src="{{ url_for('download_file', name=image) }}" alt="User Image">
+        </li>
+        {% endif %}
+        {% endfor %}
+    </ul>
+</div>
+<form action="/upload" method="post" enctype="multipart/form-data">
+    <label for="message">Enter a message:</label>
+    <input type="text" id="message" name="message" required>
+    <br>
+
+    <label for="image">Select an image:</label>
+    <input type="file" id="image" name="image" accept="image/*">
+    <br>
+
+    <input type="submit" value="Send">
+</form>
+</body>
+</html>
