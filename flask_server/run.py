@@ -34,7 +34,7 @@ def upload():
             # generate a random filename
             file_format = image.filename.split('.')[-1]
             filename = f'{os.urandom(16).hex()}.{file_format}'
-            image.save(os.path.join(CACHE_DIR, filename))
+            image.save(os.path.join('flask_server', CACHE_DIR, filename))
             chat_messages.append(('user', message, filename))
         else:
             chat_messages.append(('user', message, ''))
