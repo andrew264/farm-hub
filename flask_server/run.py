@@ -7,7 +7,8 @@ from flask import request, render_template, send_from_directory
 app = flask.Flask(__name__)
 
 chat_messages = []
-app.config['UPLOAD_FOLDER'] = 'files'
+CACHE_DIR = 'temp-files'
+app.config['UPLOAD_FOLDER'] = CACHE_DIR
 
 
 @app.route('/')
@@ -33,7 +34,7 @@ def upload():
             # generate a random filename
             file_format = image.filename.split('.')[-1]
             filename = f'{os.urandom(16).hex()}.{file_format}'
-            image.save(os.path.join('./files', filename))
+            image.save(os.path.join(CACHE_DIR, filename))
             chat_messages.append(('user', message, filename))
         else:
             chat_messages.append(('user', message, ''))
@@ -43,9 +44,9 @@ def upload():
 
 if __name__ == '__main__':
 
-    if os.path.exists('./files'):
-        shutil.rmtree('./files')
+    if os.path.exists(CACHE_DIR):
+        shutil.rmtree(CACHE_DIR)
 
-    os.mkdir('./files')
+    os.mkdir(CACHE_DIR)
 
     app.run(port=5000, debug=True)

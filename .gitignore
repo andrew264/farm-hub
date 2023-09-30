@@ -3,4 +3,4 @@ datasets/
 *.pyc
 models/
 Bloke/
-files/
+flask_server/temp-files/

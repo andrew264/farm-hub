@@ -4,6 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Farm-HUB</title>
+    <link href="{{ url_for('static', filename='css/styles.css') }}" rel="stylesheet">
+    <script src="{{ url_for('static', filename='js/scripts.js') }}"></script>
 </head>
 <body>
 <div id="chat-container">
@@ -16,17 +18,16 @@
                  src="{{ url_for('download_file', name=image) }}" alt="User Image">
         </li>
         {% endif %}
+        <hr>
         {% endfor %}
     </ul>
 </div>
 <form action="/upload" method="post" enctype="multipart/form-data">
     <label for="message">Enter a message:</label>
-    <input type="text" id="message" name="message" required>
-    <br>
+    <input type="text" id="message" name="message" autocomplete="off" required>
 
     <label for="image">Select an image:</label>
     <input type="file" id="image" name="image" accept="image/*">
-    <br>
 
     <input type="submit" value="Send">
 </form>
