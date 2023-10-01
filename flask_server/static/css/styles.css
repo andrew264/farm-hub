@@ -1,3 +1,5 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
+
 * {
   margin: 0;
   padding: 0;
@@ -15,11 +17,52 @@ body {
   padding-bottom: 25px;
   list-style-type: none;
 }
+
 form {
-  padding: 10px;
-  position: fixed;
-  bottom: 0;
-  background-color: dimgray;
-  width: 100vw;
+  background-color: #fff;
+  box-shadow: 0 10px 60px rgb(218, 229, 255);
+  border: 1px solid rgb(159, 159, 160);
+  border-radius: 20px;
+  padding: 2rem .7rem .7rem .7rem;
+  text-align: center;
+  font-size: 1.125rem;
+  min-width: 320px;
+  color: black;
+}
+
+#message{
+  padding: 5px 4px 6px 5px;
   border-radius: 10px;
+}
+
+#inputs{
+  justify-content: space-evenly;
+  padding-bottom: 25px;
+  display: flex;
+
+}
+
+#image::file-selector-button{
+  margin-right: 20px;
+  border: none;
+  background: #084cdf;
+  padding: 10px 20px;
+  border-radius: 10px;
+  color: #fff;
+  cursor: pointer;
+  transition: background .2s ease-in-out;
+}
+
+#image::file-selector-button:hover {
+  background: #0d45a5;
+}
+
+#image {
+  width: 350px;
+  max-width: 100%;
+  color: #444;
+  padding: 2px;
+  background: #fff;
+  border-radius: 10px;
+  border: 1px solid rgba(8, 8, 8, 0.288);
 }

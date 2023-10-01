@@ -23,12 +23,15 @@
     </ul>
 </div>
 <form action="/upload" method="post" enctype="multipart/form-data">
-    <label for="message">Enter a message:</label>
-    <input type="text" id="message" name="message" autocomplete="off" required>
-
-    <label for="image">Select an image:</label>
-    <input type="file" id="image" name="image" accept="image/*">
-
+    <div id="inputs">
+    <div>
+        <label for="message" id="formMsg">Enter a message:</label>
+        <input type="text" id="message" name="message" autocomplete="off" required>
+    </div>
+    <div>
+        <label for="image">Select an image:</label>
+        <input type="file" id="image" name="image" accept="image/*">
+    </div></div>
     <input type="submit" value="Send">
 </form>
 </body>
