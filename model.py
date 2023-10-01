@@ -5,12 +5,12 @@ class EffNet(tf.keras.Model):
     def __init__(self, num_classes: int):
         super(EffNet, self).__init__()
         self.num_classes = num_classes
-        self.model_head = tf.keras.applications.efficientnet_v2.EfficientNetV2S(
+        self.model_head = tf.keras.applications.efficientnet_v2.EfficientNetV2M(
             include_top=False, weights='imagenet'
         )
         self.avg_pool = tf.keras.layers.GlobalAveragePooling2D()
         self.final_layer = tf.keras.layers.Dense(self.num_classes, activation='softmax')
-        intermediate_size = (num_classes + 255) // 256 * 256
+        intermediate_size = (num_classes + 511) // 512 * 512
         self.intermediate_layer_2 = tf.keras.layers.Dense(intermediate_size, activation='relu')
         self.intermediate_layer_1 = tf.keras.layers.Dense(intermediate_size * 2, activation='relu')
 
