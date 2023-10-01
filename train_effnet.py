@@ -28,6 +28,9 @@ if __name__ == '__main__':
 
     class_names = train_dataset.class_names
     num_classes = len(class_names)
+    print(f"Total classes: {num_classes}")
+    with open('models/num_classes.txt', 'w') as f:
+        f.write(str(num_classes))
 
     model = EffNet(num_classes=num_classes)
     model.build(input_shape=(batch_size, *image_size, 3))
@@ -36,5 +39,5 @@ if __name__ == '__main__':
                   metrics=['accuracy'], jit_compile=True)
     model.summary()
 
-    model.fit(train_dataset, epochs=2, validation_data=val_dataset)
-    model.save_weights('./models/effnetv2s.h5')
+    model.fit(train_dataset, epochs=10, validation_data=val_dataset)
+    model.save_weights('./models/effnet.h5')

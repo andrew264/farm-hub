@@ -8,3 +8,4 @@ ctransformers
 Pillow
 Flask
 requests
+pandas
