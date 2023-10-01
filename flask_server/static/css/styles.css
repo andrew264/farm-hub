@@ -5,8 +5,9 @@
   padding: 0;
 }
 body {
-  background-color: #444653;
+  background-color: black;
   color: azure;
+  font-family: 'Poppins', sans-serif;
 }
 #chat-container{
   padding-left: 35px;
@@ -19,6 +20,8 @@ body {
 }
 
 form {
+  position: absolute;
+  bottom: 0px;
   background-color: #fff;
   box-shadow: 0 10px 60px rgb(218, 229, 255);
   border: 1px solid rgb(159, 159, 160);
@@ -26,13 +29,20 @@ form {
   padding: 2rem .7rem .7rem .7rem;
   text-align: center;
   font-size: 1.125rem;
-  min-width: 320px;
+  max-width: 1000px;
   color: black;
+  margin: 0;  
+}
+
+.formContainer{
+  display: flex;
+  justify-content: center;
 }
 
 #message{
-  padding: 5px 4px 6px 5px;
+  padding: 10px 20px;
   border-radius: 10px;
+  width: 500px;
 }
 
 #inputs{
@@ -58,11 +68,59 @@ form {
 }
 
 #image {
-  width: 350px;
+  width: 150px;
   max-width: 100%;
   color: #444;
   padding: 2px;
   background: #fff;
   border-radius: 10px;
   border: 1px solid rgba(8, 8, 8, 0.288);
+}
+
+.btn {
+  border: none;
+  width: 10em;
+  height: 3.5em;
+  border-radius: 3em;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 12px;
+  background: #1C1A1C;
+  cursor: pointer;
+  transition: all 450ms ease-in-out;
+}
+
+.sparkle {
+  fill: #AAAAAA;
+  transition: all 800ms ease;
+}
+
+.text {
+  font-weight: 600;
+  color: #AAAAAA;
+  font-size: medium;
+}
+
+.btn:hover {
+  background: linear-gradient(0deg,#A47CF3,#683FEA);
+  box-shadow: inset 0px 1px 0px 0px rgba(255, 255, 255, 0.4),
+  inset 0px -4px 0px 0px rgba(0, 0, 0, 0.2),
+  0px 0px 0px 4px rgba(255, 255, 255, 0.2),
+  0px 0px 180px 0px #9917FF;
+  transform: translateY(-2px);
+}
+
+.btn:hover .text {
+  color: white;
+}
+
+.btn:hover .sparkle {
+  fill: white;
+  transform: scale(1.2);
+} 
+
+.butt{
+  display: flex;
+  justify-content: center;
 }
