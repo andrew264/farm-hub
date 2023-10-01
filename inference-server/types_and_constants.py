@@ -1,4 +1,4 @@
-from typing import Literal, TypedDict, List
+from typing import Literal, TypedDict, List, Optional
 
 PORT = 8000
 
@@ -12,13 +12,26 @@ class Message(TypedDict):
 
 Dialog = List[Message]
 
-DEFAULT_SYSTEM_PROMPT = """You are a helpful, respectful and honest assistant. Always answer as helpfully as possible, while being safe. Your \
-answers should not include any harmful, unethical, racist, sexist, toxic, dangerous, or illegal content. Please ensure\
- that your responses are socially unbiased and positive in nature.
-
-If a question does not make any sense, or is not factually coherent, explain why instead of answering something not \
-correct. If you don't know the answer to a question, please don't share false information."""
+with open("./inference-server/sys_prompt.txt", "r") as f:
+    DEFAULT_SYSTEM_PROMPT = f.read()
 
 B_INST, E_INST = "[INST]", "[/INST]"
 B_SYS, E_SYS = "<<SYS>>\n", "\n<</SYS>>\n\n"
 BOS, EOS = "<s>", "</s>"
+
+
+class ImageResult:
+    def __init__(self, class_name, plant_name, disease_name: Optional, description: Optional):
+        self.class_name = class_name
+        self.plant_name = plant_name
+        self.disease_name = None if isinstance(disease_name, float) else disease_name
+        self.description = None if isinstance(description, float) else description
+
+    def __str__(self):
+        out_str = f"Image contains {self.plant_name.replace('_', ' ').lower()} "
+        if self.disease_name is not None:
+            disease_name = self.disease_name.replace("_", " ").lower()
+            out_str += f"with {disease_name} disease\n"
+        if self.description is not None:
+            out_str += f"image description: {self.description}\n"
+        return out_str
