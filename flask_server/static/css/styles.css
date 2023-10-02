@@ -1,9 +1,19 @@
 @import url('https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
-
+@import url('https://fonts.googleapis.com/css2?family=Aldrich&display=swap');
 * {
   margin: 0;
   padding: 0;
 }
+
+.headd{
+  text-align: center;
+  font-family: 'Aldrich', sans-serif;
+  text-transform: uppercase;
+  padding: 10px;
+  font-size: 40px;
+  position: sticky;
+}
+
 body {
   background-color: black;
   color: azure;
@@ -21,14 +31,14 @@ body {
 
 form {
   position: absolute;
-  bottom: 0px;
+  bottom: 15px;
   background-color: #fff;
-  box-shadow: 0 10px 60px rgb(218, 229, 255);
+  box-shadow: 0 3px 5px rgb(218, 229, 255);
   border: 1px solid rgb(159, 159, 160);
   border-radius: 20px;
-  padding: 2rem .7rem .7rem .7rem;
-  text-align: center;
+  padding: 1rem .7rem 0rem .7rem;
   font-size: 1.125rem;
+  width: 800px;
   max-width: 1000px;
   color: black;
   margin: 0;  
@@ -46,35 +56,10 @@ form {
 }
 
 #inputs{
-  justify-content: space-evenly;
+  justify-content: space-between;
   padding-bottom: 25px;
   display: flex;
 
-}
-
-#image::file-selector-button{
-  margin-right: 20px;
-  border: none;
-  background: #084cdf;
-  padding: 10px 20px;
-  border-radius: 10px;
-  color: #fff;
-  cursor: pointer;
-  transition: background .2s ease-in-out;
-}
-
-#image::file-selector-button:hover {
-  background: #0d45a5;
-}
-
-#image {
-  width: 150px;
-  max-width: 100%;
-  color: #444;
-  padding: 2px;
-  background: #fff;
-  border-radius: 10px;
-  border: 1px solid rgba(8, 8, 8, 0.288);
 }
 
 .btn {
@@ -123,4 +108,94 @@ form {
 .butt{
   display: flex;
   justify-content: center;
+}
+
+.input-div:hover{
+  animation: flicker 1s infinite;
+  cursor: pointer;
+}
+
+.input-div {
+  position: relative;
+  width: 35px;
+  height: 35px;
+  border-radius: 50%;
+  border: 2px solid #8158ee;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  overflow: hidden;
+  box-shadow: 0px 0px 5px #8158ee , inset 0px 0px 5px #8158ee,0px 0px 0px #8158ee;
+}
+
+.icon {
+  color: #8158ee;
+  font-size: 2rem;
+  cursor: pointer;
+}
+
+.input {
+  position: absolute;
+  opacity: 0;
+  width: 100%;
+  height: 100%;
+  cursor: pointer !important;
+}
+
+@keyframes flicker {
+  0% {
+    border: 2px solid #8158ee;
+    box-shadow: 0px 0px 10px #8158ee , inset 0px 0px 10px #8158ee,0px 0px 5px rgb(255, 255, 255);
+  }
+
+  5% {
+    border: none;
+    box-shadow: none;
+  }
+
+  10% {
+    border: 2px solid #8158ee;
+    box-shadow: 0px 0px 100px #8158ee , inset 0px 0px 10px #8158ee,0px 0px 5px rgb(255, 255, 255);
+  }
+
+  25% {
+    border: none;
+    box-shadow: none;
+  }
+
+  30% {
+    border: 2px solid #8158ee;
+    box-shadow: 0px 0px 100px #8158ee , inset 0px 0px 10px #8158ee,0px 0px 5px rgb(255, 255, 255);
+  }
+
+  100% {
+    border: 2px solid #8158ee;
+    box-shadow: 0px 0px 100px #8158ee , inset 0px 0px 10px #8158ee,0px 0px 5px rgb(255, 255, 255);
+  }
+}
+
+@keyframes iconflicker {
+  0% {
+    opacity: 1;
+  }
+
+  5% {
+    opacity: 0.2;
+  }
+
+  10% {
+    opacity: 1;
+  }
+
+  25% {
+    opacity: 0.2;
+  }
+
+  30% {
+    opacity: 1;
+  }
+
+  100% {
+    opacity: 1;
+  }
 }
