@@ -1,3 +1,5 @@
+import aiohttp
+import base64
 import os
 import shutil
 
@@ -11,20 +13,34 @@ CACHE_DIR = 'temp-files'
 app.config['UPLOAD_FOLDER'] = CACHE_DIR
 
 
+async def get_inference_output():
+    message, image = chat_messages[-1][1:]
+    if image == '':
+        image = None
+    else:
+        with open(os.path.join('flask_server', CACHE_DIR, image), 'rb') as f:
+            image = base64.b64encode(f.read()).decode('utf-8')
+    input_data = {'message': message, 'image': image}
+    async with aiohttp.ClientSession() as session:
+        r = await session.post('http://localhost:8000/inference', json=input_data)
+        chat_messages.append(('bot', await r.text(), ''))
+        print(chat_messages[-1])
+
+
 @app.route('/')
-def index():
+async def index():
     return render_template('index.html', chat_messages=chat_messages)
 
 
 @app.route('/<path:name>')
-def download_file(name):
+async def download_file(name):
     return send_from_directory(
         app.config['UPLOAD_FOLDER'], name, as_attachment=True
     )
 
 
 @app.route('/upload', methods=['POST'])
-def upload():
+async def upload():
     message = request.form.get('message', '')
 
     if 'file' in request.files:
@@ -38,6 +54,7 @@ def upload():
             chat_messages.append(('user', message, filename))
         else:
             chat_messages.append(('user', message, ''))
+    await get_inference_output()
 
     return render_template('index.html', chat_messages=chat_messages)
 

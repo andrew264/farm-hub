@@ -6,6 +6,7 @@ numpy
 matplotlib
 ctransformers
 Pillow
-Flask
+flask[async]
 requests
 pandas
+aiohttp
