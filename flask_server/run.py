@@ -27,8 +27,8 @@ def download_file(name):
 def upload():
     message = request.form.get('message', '')
 
-    if 'image' in request.files:
-        image = request.files['image']
+    if 'file' in request.files:
+        image = request.files['file']
 
         if image.filename != '':
             # generate a random filename
