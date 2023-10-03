@@ -27,6 +27,14 @@ async def get_inference_output():
         print(chat_messages[-1])
 
 
+async def reset_dialog():
+    chat_messages.clear()
+    input_data = {'reset_dialog': True}
+    async with aiohttp.ClientSession() as session:
+        r = await session.post('http://localhost:8000/inference', json=input_data)
+        print(await r.text())
+
+
 @app.route('/')
 async def index():
     return render_template('index.html', chat_messages=chat_messages)

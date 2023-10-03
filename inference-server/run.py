@@ -54,6 +54,12 @@ class RequestHandler(http.server.SimpleHTTPRequestHandler):
         self.end_headers()
         input_message = input_json.get('message', '')
         input_image = input_json.get('image', None)
+        reset_dialog = input_json.get('reset_dialog', False)
+        if reset_dialog:
+            dialog.clear()
+            dialog.append({"role": "system", "content": DEFAULT_SYSTEM_PROMPT, })
+            print('Dialog reset.')
+            return self.wfile.write("reset_dialog = True".encode('utf-8'))
         if input_image is not None:
             res = infer_image(input_image)
             dialog.append({"role": "user", "content": f"{res}\n{input_message}", })
