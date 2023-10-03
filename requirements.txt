@@ -9,4 +9,4 @@ Pillow
 flask[async]
 requests
 pandas
-aiohttp
+httpx

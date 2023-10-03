@@ -1,16 +1,17 @@
-import aiohttp
+import httpx
 import base64
 import os
 import shutil
 
 import flask
-from flask import request, render_template, send_from_directory
+from flask import request, render_template, send_from_directory, redirect
 
 app = flask.Flask(__name__)
 
 chat_messages = []
 CACHE_DIR = 'temp-files'
 app.config['UPLOAD_FOLDER'] = CACHE_DIR
+SERVER_URL = 'http://localhost:8000'
 
 
 async def get_inference_output():
@@ -21,18 +22,33 @@ async def get_inference_output():
         with open(os.path.join('flask_server', CACHE_DIR, image), 'rb') as f:
             image = base64.b64encode(f.read()).decode('utf-8')
     input_data = {'message': message, 'image': image}
-    async with aiohttp.ClientSession() as session:
-        r = await session.post('http://localhost:8000/inference', json=input_data)
-        chat_messages.append(('bot', await r.text(), ''))
-        print(chat_messages[-1])
+    output_text = ''
+    async with httpx.AsyncClient() as client:
+        try:
+            response = await client.post(SERVER_URL, json=input_data, timeout=40.0)
+
+            if response.status_code == 200:
+                async for chunk in response.aiter_bytes(1):
+                    if chunk:
+                        print(chunk.decode('utf-8'), end="", flush=True)
+                        output_text += chunk.decode('utf-8')
+            else:
+                print(f"Request failed with status code {response.status_code}: {response.text}")
+        except httpx.TimeoutException as exc:
+            print(f"Request timed out: {exc}")
+
+    chat_messages.append(('bot', output_text, ''))
 
 
 async def reset_dialog():
     chat_messages.clear()
     input_data = {'reset_dialog': True}
-    async with aiohttp.ClientSession() as session:
-        r = await session.post('http://localhost:8000/inference', json=input_data)
-        print(await r.text())
+    async with httpx.AsyncClient() as client:
+        try:
+            response = await client.post(SERVER_URL, json=input_data, timeout=4.0)
+            print(response.status_code, response.text)
+        except httpx.TimeoutException as exc:
+            print(f"Request timed out: {exc}")
 
 
 @app.route('/')
@@ -64,7 +80,13 @@ async def upload():
             chat_messages.append(('user', message, ''))
     await get_inference_output()
 
-    return render_template('index.html', chat_messages=chat_messages)
+    return redirect('/')
+
+
+@app.route('/reset', methods=['POST'])
+async def reset():
+    await reset_dialog()
+    return redirect('/')
 
 
 if __name__ == '__main__':
