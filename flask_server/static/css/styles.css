@@ -45,6 +45,8 @@ form {
 }
 
 .formContainer{
+  position: static;
+  bottom: 0px;
   display: flex;
   justify-content: center;
 }
