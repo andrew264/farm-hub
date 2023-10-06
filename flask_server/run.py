@@ -26,7 +26,7 @@ else:
 INFERENCE_SERVER_URL = f'http://{IP}:{PORT}/'
 
 
-async def get_inference_output(language = 'en'):
+async def get_inference_output(language='en'):
     message, image = chat_messages[-1][1:]
     if image == '':
         image = None
@@ -57,7 +57,7 @@ async def reset_dialog():
     input_data = {'reset_dialog': True}
     async with httpx.AsyncClient() as client:
         try:
-            response = await client.post(SERVER_URL, json=input_data, timeout=4.0)
+            response = await client.post(INFERENCE_SERVER_URL, json=input_data, timeout=4.0)
             print(response.status_code, response.text)
         except httpx.TimeoutException as exc:
             print(f"Request timed out: {exc}")
@@ -109,4 +109,4 @@ if __name__ == '__main__':
 
     os.mkdir(CACHE_DIR)
 
-    app.run(host='0.0.0.0', port=5000,)
+    app.run(host='0.0.0.0', port=5000, )
