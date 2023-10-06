@@ -51,7 +51,6 @@ async def get_inference_output(language='en'):
 
 
 async def reset_dialog():
-    print("Blu blu blu")
     chat_messages.clear()
     input_data = {'reset_dialog': True}
     async with httpx.AsyncClient() as client:
@@ -96,7 +95,7 @@ async def upload():
 
 
 @app.route('/reset')
-async def uhh():
+async def reset():
     await reset_dialog()
     return redirect('/')
 
