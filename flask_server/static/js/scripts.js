@@ -113,4 +113,30 @@ return response.text();
 });
 }
 
+function startSpeechRecognition() {
+    const recognition = new webkitSpeechRecognition();
+    recognition.continuous = true;
+    recognition.interimResults = true;
+    recognition.lang = 'en-US';
 
+    let timeoutId;
+
+    recognition.onresult = function(event) {
+        const speechResult = event.results[event.results.length - 1][0].transcript;
+        document.getElementById('inputField').value = speechResult;
+        clearTimeout(timeoutId);
+        timeoutId = setTimeout(function() {
+            recognition.stop();
+            startSpeechRecognition();
+        }, 3000);
+    };
+
+    recognition.onend = function() {
+        clearTimeout(timeoutId);
+        timeoutId = setTimeout(function() {
+            startSpeechRecognition();
+        }, 3000);
+    };
+
+    recognition.start();
+}
