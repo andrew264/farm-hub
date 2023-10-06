@@ -1,9 +1,10 @@
-import httpx
 import base64
+import json
 import os
 import shutil
 
 import flask
+import httpx
 from flask import request, render_template, send_from_directory, redirect
 
 app = flask.Flask(__name__)
@@ -11,7 +12,18 @@ app = flask.Flask(__name__)
 chat_messages = []
 CACHE_DIR = 'temp-files'
 app.config['UPLOAD_FOLDER'] = CACHE_DIR
-SERVER_URL = 'http://localhost:8000'
+CONFIG = 'config.json'
+IP = 'localhost'
+PORT = 8000
+if os.path.exists(CONFIG):
+    with open(CONFIG, 'r') as c:
+        config = json.load(c)
+        IP = config.get('ip', IP)
+        PORT = config.get('port', PORT)
+else:
+    with open(CONFIG, 'w') as c:
+        json.dump({'ip': IP, 'port': PORT}, c, indent=4)
+SERVER_URL = f'http://{IP}:{PORT}/'
 
 
 async def get_inference_output():

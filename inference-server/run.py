@@ -12,7 +12,7 @@ from ctransformers import AutoModelForCausalLM
 
 from model import EffNet
 from server_utils import get_tokens
-from types_and_constants import PORT, Dialog, DEFAULT_SYSTEM_PROMPT, ImageResult
+from types_and_constants import Dialog, DEFAULT_SYSTEM_PROMPT, ImageResult
 from utils import enable_memory_growth
 
 model = None
@@ -76,6 +76,18 @@ class RequestHandler(http.server.SimpleHTTPRequestHandler):
 
 
 if __name__ == "__main__":
+    CONFIG = 'config.json'
+    IP = 'localhost'
+    PORT = 8000
+    if os.path.exists(CONFIG):
+        with open(CONFIG, 'r') as c:
+            config = json.load(c)
+            IP = config.get('ip', IP)
+            PORT = config.get('port', PORT)
+    else:
+        with open(CONFIG, 'w') as c:
+            json.dump({'ip': IP, 'port': PORT}, c, indent=4)
+
     print('Loading LLaMA...')
     model = AutoModelForCausalLM.from_pretrained("./Bloke/model.gguf",
                                                  model_type="llama",
@@ -97,6 +109,6 @@ if __name__ == "__main__":
     plants_dataframe = pd.read_csv("datasets/FARM_HUB.csv")
     print('Plants dataframe loaded.')
 
-    with socketserver.TCPServer(("", PORT), RequestHandler) as httpd:
+    with socketserver.TCPServer((IP, PORT), RequestHandler) as httpd:
         print("Server is running on port", PORT)
         httpd.serve_forever()

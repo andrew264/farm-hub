@@ -1,7 +1,5 @@
 from typing import Literal, TypedDict, List, Optional
 
-PORT = 8000
-
 Role = Literal["system", "user", "assistant"]
 
 
