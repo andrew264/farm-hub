@@ -29,6 +29,10 @@ def get_tokens(dialog: Dialog) -> str:
 
 
 def split_and_translate(input_text: str, translator: Translator, max_chunk_length: int = 480) -> str:
+    if len(input_text) <= 6:
+        return input_text
+    if len(input_text) <= max_chunk_length:
+        return translator.translate(input_text)
     # Split input text into sentences
     sentences = re.split(r'(?<!\w\.\w.)(?<![A-Z][a-z]\.)(?<=\.|\?|\!)\s', input_text)
 
@@ -61,6 +65,8 @@ def split_and_translate(input_text: str, translator: Translator, max_chunk_lengt
 
 
 def translate_to_english(text: str) -> str:
+    if len(text) <= 6:
+        return text
     # Detect the language of the input text
     detected_language = detect(text)
     print(f"Detected language: {detected_language}")
@@ -82,6 +88,8 @@ def get_recommended_video(title: str, language: str = 'en') -> Tuple[str, str]:
     :param language: Language of the video
     :return: Tuple of video title and Embed URL
     """
+    if len(title) <= 6:
+        return '', ''
     language_code_to_language = {
         'en': 'English',
         'es': 'Spanish',

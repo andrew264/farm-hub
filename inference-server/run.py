@@ -13,6 +13,7 @@ import numpy as np
 import pandas as pd
 from PIL import Image
 from ctransformers import AutoModelForCausalLM
+import tensorflow as tf
 from translate import Translator
 
 from model import CNeXt
@@ -66,7 +67,8 @@ class RequestHandler(http.server.SimpleHTTPRequestHandler):
         reset_dialog = input_json.get('reset_dialog', False)
         language = input_json.get('language', 'en')
         gimme_video = True
-        no_no_words = ['contain', 'image', 'picture', 'photo', 'pic', 'photo', 'show', 'display', 'hi', 'hello']
+        no_no_words = ['contain', 'image', 'picture', 'photo', 'pic', 'photo', 'show', 'display', 'hi', 'hello', 'hey',
+                       'ok', 'thanks', 'you', 'contents', 'content']
         if any(word in input_message.lower().split() for word in no_no_words):
             gimme_video = False
         if reset_dialog:
@@ -81,6 +83,7 @@ class RequestHandler(http.server.SimpleHTTPRequestHandler):
             video_title, video_url = '', ''
         if input_image is not None:
             res = infer_image(input_image)
+            print(f'Image result: {res}')
             dialog.append({"role": "user", "content": f"{res}\n{input_message}", })
         else:
             dialog.append({"role": "user", "content": input_message, })
@@ -113,13 +116,14 @@ if __name__ == "__main__":
     print('Loading image model...')
     with open("models/num_classes.txt", "r") as f:
         num_classes = int(f.read())
-    enable_memory_growth()  # enable memory growth for GPU so TensorFlow doesn't eat all the memory
-    image_model = CNeXt(num_classes=num_classes)
-    image_model.build((1, 256, 256, 3))
-    if os.path.exists('models/CNeXt.h5'):
-        image_model.load_weights('models/CNeXt.h5')
-    else:
-        raise FileNotFoundError('Image model weights not found.')
+    # enable_memory_growth()  # enable memory growth for GPU so TensorFlow doesn't eat all the memory
+    with tf.device('/CPU:0'):
+        image_model = CNeXt(num_classes=num_classes)
+        image_model.build((1, 256, 256, 3))
+        if os.path.exists('models/CNeXt.h5'):
+            image_model.load_weights('models/CNeXt.h5')
+        else:
+            raise FileNotFoundError('Image model weights not found.')
     print('Image model loaded.')
     print('Loading plants dataframe...')
     plants_dataframe = pd.read_csv("datasets/FARM_HUB.csv")
