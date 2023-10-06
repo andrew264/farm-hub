@@ -1,3 +1,7 @@
+import re
+
+from translate import Translator
+
 from types_and_constants import Dialog, BOS, EOS, B_INST, E_INST, B_SYS, E_SYS
 
 
@@ -19,3 +23,35 @@ def get_tokens(dialog: Dialog) -> str:
     )
     dialog_tokens += f"{BOS}{B_INST} {(dialog[-1]['content']).strip()} {E_INST}{EOS}",
     return ''.join(dialog_tokens)
+
+
+def split_and_translate(input_text: str, translator: Translator, max_chunk_length: int = 480) -> str:
+    # Split input text into sentences
+    sentences = re.split(r'(?<!\w\.\w.)(?<![A-Z][a-z]\.)(?<=\.|\?|\!)\s', input_text)
+
+    # Initialize variables
+    current_chunk = ""
+    translated_chunks = []
+
+    for sentence in sentences:
+        # If adding the next sentence doesn't exceed the max_chunk_length, add it to the current_chunk
+        if len(current_chunk) + len(sentence) + 1 <= max_chunk_length:
+            current_chunk += " " + sentence if current_chunk else sentence
+        else:
+            # Translate the current chunk
+            translated_chunk = translator.translate(current_chunk)
+
+            # Append the translated chunk to the result
+            translated_chunks.append(translated_chunk)
+
+            # Start a new chunk with the current sentence
+            current_chunk = sentence
+
+    # Translate and append the last chunk
+    translated_chunk = translator.translate(current_chunk)
+    translated_chunks.append(translated_chunk)
+
+    # Combine the translated chunks into a single output
+    translated_output = " ".join(translated_chunks)
+
+    return translated_output

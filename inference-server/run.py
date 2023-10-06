@@ -4,6 +4,7 @@ import json
 import os
 import socketserver
 from io import BytesIO
+from typing import Optional
 
 import numpy as np
 import pandas as pd
@@ -12,7 +13,7 @@ from ctransformers import AutoModelForCausalLM
 from translate import Translator
 
 from model import EffNet
-from server_utils import get_tokens
+from server_utils import get_tokens, split_and_translate
 from types_and_constants import Dialog, DEFAULT_SYSTEM_PROMPT, ImageResult
 from utils import enable_memory_growth
 
@@ -24,11 +25,10 @@ dialog: Dialog = [
     {"role": "system", "content": DEFAULT_SYSTEM_PROMPT, },
 ]
 
-translators = {
-    'en': None,
-    'es': None,
-    'fr': None,
+translators: dict[str, Optional[Translator]] = {
+    'en': None,  # bruh
 }
+
 
 def get_image_class_and_description(class_num: int) -> ImageResult:
     row = plants_dataframe.iloc[class_num]
@@ -83,9 +83,9 @@ class RequestHandler(http.server.SimpleHTTPRequestHandler):
         dialog.append({"role": "assistant", "content": out, })
         # translate out
         if language != 'en':
-            if translators[language] is None:
+            if language not in translators:
                 translators[language] = Translator(to_lang=language)
-            out = translators[language].translate(out)
+            out = split_and_translate(out, translators[language])
             self.wfile.write(out.encode('utf-8'))
 
 
