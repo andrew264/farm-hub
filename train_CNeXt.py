@@ -1,7 +1,7 @@
 import tensorflow as tf
 from keras.optimizers import Lion
 
-from model import EffNet
+from model import CNeXt
 from utils import enable_memory_growth
 
 enable_memory_growth()
@@ -32,12 +32,12 @@ if __name__ == '__main__':
     with open('models/num_classes.txt', 'w') as f:
         f.write(str(num_classes))
 
-    model = EffNet(num_classes=num_classes)
+    model = CNeXt(num_classes=num_classes)
     model.build(input_shape=(batch_size, *image_size, 3))
 
     model.compile(optimizer=Lion(lr=0.001), loss='sparse_categorical_crossentropy',
                   metrics=['accuracy'], jit_compile=True)
     model.summary()
 
-    model.fit(train_dataset, epochs=10, validation_data=val_dataset)
-    model.save_weights('./models/effnet.h5')
+    model.fit(train_dataset, epochs=3, validation_data=val_dataset)
+    model.save_weights('./models/CNeXt.h5')

@@ -12,7 +12,7 @@ from PIL import Image
 from ctransformers import AutoModelForCausalLM
 from translate import Translator
 
-from model import EffNet
+from model import CNeXt
 from server_utils import get_tokens, split_and_translate, translate_to_english
 from types_and_constants import Dialog, DEFAULT_SYSTEM_PROMPT, ImageResult
 from utils import enable_memory_growth
@@ -104,10 +104,10 @@ if __name__ == "__main__":
     with open("models/num_classes.txt", "r") as f:
         num_classes = int(f.read())
     enable_memory_growth()  # enable memory growth for GPU so TensorFlow doesn't eat all the memory
-    image_model = EffNet(num_classes=num_classes)
+    image_model = CNeXt(num_classes=num_classes)
     image_model.build((1, 256, 256, 3))
-    if os.path.exists('models/effnet.h5'):
-        image_model.load_weights('models/effnet.h5')
+    if os.path.exists('models/CNeXt.h5'):
+        image_model.load_weights('models/CNeXt.h5')
     else:
         raise FileNotFoundError('Image model weights not found.')
     print('Image model loaded.')

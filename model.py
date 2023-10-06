@@ -1,12 +1,12 @@
 import tensorflow as tf
 
 
-class EffNet(tf.keras.Model):
+class CNeXt(tf.keras.Model):
     def __init__(self, num_classes: int):
-        super(EffNet, self).__init__()
+        super(CNeXt, self).__init__()
         self.num_classes = num_classes
-        self.model_head = tf.keras.applications.efficientnet_v2.EfficientNetV2M(
-            include_top=False, weights='imagenet'
+        self.model_head = tf.keras.applications.ConvNeXtBase(
+            include_top=False
         )
         self.avg_pool = tf.keras.layers.GlobalAveragePooling2D()
         self.final_layer = tf.keras.layers.Dense(self.num_classes, activation='softmax')
@@ -26,6 +26,6 @@ class EffNet(tf.keras.Model):
         return x
 
     def get_config(self):
-        config = super(EffNet, self).get_config()
+        config = super(CNeXt, self).get_config()
         config.update({'num_classes': self.num_classes})
         return config
