@@ -26,14 +26,14 @@ else:
 SERVER_URL = f'http://{IP}:{PORT}/'
 
 
-async def get_inference_output():
+async def get_inference_output(language = 'en'):
     message, image = chat_messages[-1][1:]
     if image == '':
         image = None
     else:
         with open(os.path.join('flask_server', CACHE_DIR, image), 'rb') as f:
             image = base64.b64encode(f.read()).decode('utf-8')
-    input_data = {'message': message, 'image': image}
+    input_data = {'message': message, 'image': image, 'language': language}
     output_text = ''
     async with httpx.AsyncClient() as client:
         try:
@@ -79,7 +79,6 @@ async def download_file(name):
 async def upload():
     message = request.form.get('message', '')
     langSelect = request.form.get('langSelect', 'No Lang')
-    print(langSelect)
 
     if 'file' in request.files:
         image = request.files['file']
@@ -92,7 +91,7 @@ async def upload():
             chat_messages.append(('user', message, filename))
         else:
             chat_messages.append(('user', message, ''))
-    await get_inference_output()
+    await get_inference_output(langSelect)
 
     return redirect('/')
 
