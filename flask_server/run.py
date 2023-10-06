@@ -24,6 +24,7 @@ else:
     with open(CONFIG, 'w') as c:
         json.dump({'ip': IP, 'port': PORT}, c, indent=4)
 INFERENCE_SERVER_URL = f'http://{IP}:{PORT}/'
+print(INFERENCE_SERVER_URL)
 
 
 async def get_inference_output(language='en'):
