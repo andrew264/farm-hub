@@ -1,7 +1,10 @@
+import os
+
+os.environ['TF_CPP_MIN_LOG_LEVEL'] = '3'
+
 import base64
 import http.server
 import json
-import os
 import socketserver
 from io import BytesIO
 from typing import Optional
@@ -13,7 +16,7 @@ from ctransformers import AutoModelForCausalLM
 from translate import Translator
 
 from model import CNeXt
-from server_utils import get_tokens, split_and_translate, translate_to_english
+from server_utils import get_tokens, split_and_translate, translate_to_english, get_recommended_video
 from types_and_constants import Dialog, DEFAULT_SYSTEM_PROMPT, ImageResult
 from utils import enable_memory_growth
 
@@ -62,12 +65,20 @@ class RequestHandler(http.server.SimpleHTTPRequestHandler):
         input_image = input_json.get('image', None)
         reset_dialog = input_json.get('reset_dialog', False)
         language = input_json.get('language', 'en')
+        gimme_video = True
+        no_no_words = ['contain', 'image', 'picture', 'photo', 'pic', 'photo', 'show', 'display', 'hi', 'hello']
+        if any(word in input_message.lower().split() for word in no_no_words):
+            gimme_video = False
         if reset_dialog:
             dialog.clear()
             dialog.append({"role": "system", "content": DEFAULT_SYSTEM_PROMPT, })
             print('Dialog reset.')
             return
         input_message = translate_to_english(input_message)
+        if gimme_video:
+            video_title, video_url = get_recommended_video(input_message)
+        else:
+            video_title, video_url = '', ''
         if input_image is not None:
             res = infer_image(input_image)
             dialog.append({"role": "user", "content": f"{res}\n{input_message}", })
@@ -79,15 +90,14 @@ class RequestHandler(http.server.SimpleHTTPRequestHandler):
                            top_p=0.9, temperature=1.2, batch_size=1,
                            max_new_tokens=512, ):
             out += token
-            if language == 'en':
-                self.wfile.write(token.replace('</s>', '').encode('utf-8'))
         dialog.append({"role": "assistant", "content": out, })
         # translate out
         if language != 'en':
             if language not in translators:
                 translators[language] = Translator(to_lang=language)
             out = split_and_translate(out, translators[language])
-            self.wfile.write(out.encode('utf-8'))
+        output_json = dict(message=out, video_title=video_title, video_url=video_url)
+        self.wfile.write(json.dumps(output_json).encode('utf-8'))
 
 
 if __name__ == "__main__":

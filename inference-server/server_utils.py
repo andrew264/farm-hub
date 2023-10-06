@@ -1,7 +1,9 @@
 import re
+from typing import Tuple
 
 from langdetect import detect
 from translate import Translator
+from youtubesearchpython import VideosSearch
 
 from types_and_constants import Dialog, BOS, EOS, B_INST, E_INST, B_SYS, E_SYS
 
@@ -71,3 +73,32 @@ def translate_to_english(text: str) -> str:
         return translated_text
     else:
         return text
+
+
+def get_recommended_video(title: str, language: str = 'en') -> Tuple[str, str]:
+    """
+    Recommend a video based on the title
+    :param title: Title of the video
+    :param language: Language of the video
+    :return: Tuple of video title and Embed URL
+    """
+    language_code_to_language = {
+        'en': 'English',
+        'es': 'Spanish',
+        'fr': 'French',
+        'hi': 'Hindi',
+        'bn': 'Bengali',
+        'te': 'Telugu',
+        'ta': 'Tamil',
+        'mr': 'Marathi',
+        'ur': 'Urdu',
+        'gu': 'Gujarati',
+        'kn': 'Kannada',
+        'ml': 'Malayalam',
+        'pa': 'Punjabi',
+    }
+    result = VideosSearch(title, limit=1).result()
+    video_title = result["result"][0]["title"] + f" ({language_code_to_language[language]})"
+    video_id = result["result"][0]["id"]
+    embed_url = f"https://www.youtube.com/embed/{video_id}"
+    return video_title, embed_url

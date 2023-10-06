@@ -28,26 +28,28 @@ print(INFERENCE_SERVER_URL)
 
 
 async def get_inference_output(language='en'):
-    message, image = chat_messages[-1][1:]
+    message, image = chat_messages[-1][1:3]
     if image == '':
         image = None
     else:
         with open(os.path.join('flask_server', CACHE_DIR, image), 'rb') as f:
             image = base64.b64encode(f.read()).decode('utf-8')
     input_data = {'message': message, 'image': image, 'language': language}
-    output_text = ''
     async with httpx.AsyncClient() as client:
         try:
             response = await client.post(INFERENCE_SERVER_URL, json=input_data, timeout=40.0)
 
             if response.status_code == 200:
-                output_text = response.text
+                output_json = response.json()
             else:
                 print(f"Request failed with status code {response.status_code}: {response.text}")
         except httpx.TimeoutException as exc:
             print(f"Request timed out: {exc}")
-
-    chat_messages.append(('bot', output_text, ''))
+            return
+    output_text = output_json.get('message', '')
+    video_title = output_json.get('video_title', '')
+    video_url = output_json.get('video_url', '')
+    chat_messages.append(('bot', output_text, '', video_title, video_url))
 
 
 async def reset_dialog():
@@ -86,9 +88,9 @@ async def upload():
             file_format = image.filename.split('.')[-1]
             filename = f'{os.urandom(16).hex()}.{file_format}'
             image.save(os.path.join('flask_server', CACHE_DIR, filename))
-            chat_messages.append(('user', message, filename))
+            chat_messages.append(('user', message, filename, '', ''))
         else:
-            chat_messages.append(('user', message, ''))
+            chat_messages.append(('user', message, '', '', ''))
     await get_inference_output(langSelect)
 
     return redirect('/')

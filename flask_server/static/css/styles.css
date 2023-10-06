@@ -2,255 +2,257 @@
 @import url('https://fonts.googleapis.com/css2?family=Aldrich&display=swap');
 
 @font-face {
-  font-family: myFont;
-  src: url('../font/MhokoFree-MVOlr.ttf');
+    font-family: myFont;
+    src: url('../font/MhokoFree-MVOlr.ttf');
 }
 
 * {
-  margin: 0;
-  padding: 0;
+    margin: 0;
+    padding: 0;
 }
 
-.container{
-  display: flex;
+.container {
+    display: flex;
     flex-direction: column;
     height: 100%;
 }
 
-.headd{
-  text-align: center;
-  font-family: myFont;
-  text-transform: uppercase;
-  padding: 10px;
-  font-size: 40px;
-  position: sticky;
+.headd {
+    text-align: center;
+    font-family: myFont;
+    text-transform: uppercase;
+    padding: 10px;
+    font-size: 40px;
+    position: sticky;
 }
 
-body, html{
+body, html {
     margin: 0;
     padding: 0;
     height: 100%
 }
 
 body {
-  background-size: cover;
-  background-blend-mode: lighten;
-  background-color: black;
-  color: black;
-  background-image: url("../assets/BG.jpg");
+    background-size: cover;
+    background-blend-mode: lighten;
+    background-color: black;
+    color: black;
+    background-image: url("../assets/BG.jpg");
     background-repeat: no-repeat;
-  font-family: 'Poppins', sans-serif;
+    font-family: 'Poppins', sans-serif;
 }
-#chat-container{
-  background-color: rgba(0, 0, 0, 0.5);
-  box-shadow: inset 0 0 10px #311b0b;
-  padding-left: 35px;
-  padding-right: 35px;
-  padding-bottom: 500px;
-  margin-bottom: 110px;
-  flex-grow: 1; /* This allows the content to take up remaining space */
-  overflow-y: auto; /* Enables vertical scrolling for content */
-  padding: 20px;
+
+#chat-container {
+    background-color: rgba(0, 0, 0, 0.5);
+    box-shadow: inset 0 0 10px #311b0b;
+    padding-left: 35px;
+    padding-right: 35px;
+    padding-bottom: 500px;
+    margin-bottom: 110px;
+    flex-grow: 1; /* This allows the content to take up remaining space */
+    overflow-y: auto; /* Enables vertical scrolling for content */
+    padding: 20px;
 }
 
 #chat-container li {
-  border-radius: 10px;
-  padding-bottom: 2px;
-  margin-bottom: 10px;
-  padding-top: 5px;
-  padding-left: 10px;
-  padding-right: 10px;
-  list-style-type: none;
+    border-radius: 10px;
+    padding-bottom: 2px;
+    margin-bottom: 10px;
+    padding-top: 5px;
+    padding-left: 10px;
+    padding-right: 10px;
+    list-style-type: none;
 }
 
-.bot{
-  background-color: #1C1A1C;
+.bot {
+    background-color: #1C1A1C;
+    color: white;
 }
 
-.user{
-  padding-left: 5px;
-  background-color:rgba(5, 255, 51, 0.614);
-  box-shadow: .4em .4em black;
+.user {
+    padding-left: 5px;
+    background-color: rgba(5, 255, 51, 0.614);
+    box-shadow: .4em .4em black;
 }
 
 form {
-  position: absolute;
-  bottom: 15px;
-  background-color: #fff;
-  box-shadow: 0 3px 5px rgb(218, 229, 255);
-  border: 1px solid rgb(159, 159, 160);
-  border-radius: 20px;
-  padding: 1rem .7rem 0rem .7rem;
-  font-size: 1.125rem;
-  width: 1000px;
-  max-width: 1500px;
-  color: black;
-  margin: 0;  
+    position: absolute;
+    bottom: 15px;
+    background-color: #fff;
+    box-shadow: 0 3px 5px rgb(218, 229, 255);
+    border: 1px solid rgb(159, 159, 160);
+    border-radius: 20px;
+    padding: 1rem .7rem 0rem .7rem;
+    font-size: 1.125rem;
+    width: 1000px;
+    max-width: 1500px;
+    color: black;
+    margin: 0;
 }
 
-.formContainer{
-  bottom: 0px;
-  display: flex;
-  justify-content: center;
+.formContainer {
+    bottom: 0px;
+    display: flex;
+    justify-content: center;
 }
 
-#message{
-  padding: 10px 20px;
-  border-radius: 10px;
-  width: 500px;
+#message {
+    padding: 10px 20px;
+    border-radius: 10px;
+    width: 500px;
 }
 
-#inputs{
-  justify-content: space-between;
-  padding-bottom: 25px;
-  display: flex;
+#inputs {
+    justify-content: space-between;
+    padding-bottom: 25px;
+    display: flex;
 
 }
 
 .btn {
-  border: none;
-  width: 10em;
-  height: 3.5em;
-  border-radius: 3em;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  gap: 12px;
-  background: #1C1A1C;
-  cursor: pointer;
-  transition: all 450ms ease-in-out;
+    border: none;
+    width: 10em;
+    height: 3.5em;
+    border-radius: 3em;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 12px;
+    background: #1C1A1C;
+    cursor: pointer;
+    transition: all 450ms ease-in-out;
 }
 
 .sparkle {
-  fill: #AAAAAA;
-  transition: all 800ms ease;
+    fill: #AAAAAA;
+    transition: all 800ms ease;
 }
 
 .text {
-  font-weight: 600;
-  color: #AAAAAA;
-  font-size: medium;
+    font-weight: 600;
+    color: #AAAAAA;
+    font-size: medium;
 }
 
 .btn:hover {
-  background: linear-gradient(0deg,#A47CF3,#683FEA);
-  box-shadow: inset 0px 1px 0px 0px rgba(255, 255, 255, 0.4),
-  inset 0px -4px 0px 0px rgba(0, 0, 0, 0.2),
-  0px 0px 0px 4px rgba(255, 255, 255, 0.2),
-  0px 0px 180px 0px #9917FF;
-  transform: translateY(-2px);
+    background: linear-gradient(0deg, #A47CF3, #683FEA);
+    box-shadow: inset 0px 1px 0px 0px rgba(255, 255, 255, 0.4),
+    inset 0px -4px 0px 0px rgba(0, 0, 0, 0.2),
+    0px 0px 0px 4px rgba(255, 255, 255, 0.2),
+    0px 0px 180px 0px #9917FF;
+    transform: translateY(-2px);
 }
 
 .btn:hover .text {
-  color: white;
+    color: white;
 }
 
 .btn:hover .sparkle {
-  fill: white;
-  transform: scale(1.2);
-} 
-
-.butt{
-  display: flex;
-  justify-content: center;
+    fill: white;
+    transform: scale(1.2);
 }
 
-.input-div:hover{
-  animation: flicker 1s infinite;
-  cursor: pointer;
+.butt {
+    display: flex;
+    justify-content: center;
+}
+
+.input-div:hover {
+    animation: flicker 1s infinite;
+    cursor: pointer;
 }
 
 .input-div {
-  position: relative;
-  width: 35px;
-  height: 35px;
-  border-radius: 50%;
-  border: 2px solid #8158ee;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  overflow: hidden;
-  box-shadow: 0px 0px 5px #8158ee , inset 0px 0px 5px #8158ee,0px 0px 0px #8158ee;
+    position: relative;
+    width: 35px;
+    height: 35px;
+    border-radius: 50%;
+    border: 2px solid #8158ee;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
+    box-shadow: 0px 0px 5px #8158ee, inset 0px 0px 5px #8158ee, 0px 0px 0px #8158ee;
 }
 
 .icon {
-  color: #8158ee;
-  font-size: 2rem;
-  cursor: pointer;
+    color: #8158ee;
+    font-size: 2rem;
+    cursor: pointer;
 }
 
 .input {
-  position: absolute;
-  opacity: 0;
-  width: 100%;
-  height: 100%;
-  cursor: pointer !important;
+    position: absolute;
+    opacity: 0;
+    width: 100%;
+    height: 100%;
+    cursor: pointer !important;
 }
 
 @keyframes flicker {
-  0% {
-    border: 2px solid #8158ee;
-    box-shadow: 0px 0px 10px #8158ee , inset 0px 0px 10px #8158ee,0px 0px 5px rgb(255, 255, 255);
-  }
+    0% {
+        border: 2px solid #8158ee;
+        box-shadow: 0px 0px 10px #8158ee, inset 0px 0px 10px #8158ee, 0px 0px 5px rgb(255, 255, 255);
+    }
 
-  5% {
-    border: none;
-    box-shadow: none;
-  }
+    5% {
+        border: none;
+        box-shadow: none;
+    }
 
-  10% {
-    border: 2px solid #8158ee;
-    box-shadow: 0px 0px 100px #8158ee , inset 0px 0px 10px #8158ee,0px 0px 5px rgb(255, 255, 255);
-  }
+    10% {
+        border: 2px solid #8158ee;
+        box-shadow: 0px 0px 100px #8158ee, inset 0px 0px 10px #8158ee, 0px 0px 5px rgb(255, 255, 255);
+    }
 
-  25% {
-    border: none;
-    box-shadow: none;
-  }
+    25% {
+        border: none;
+        box-shadow: none;
+    }
 
-  30% {
-    border: 2px solid #8158ee;
-    box-shadow: 0px 0px 100px #8158ee , inset 0px 0px 10px #8158ee,0px 0px 5px rgb(255, 255, 255);
-  }
+    30% {
+        border: 2px solid #8158ee;
+        box-shadow: 0px 0px 100px #8158ee, inset 0px 0px 10px #8158ee, 0px 0px 5px rgb(255, 255, 255);
+    }
 
-  100% {
-    border: 2px solid #8158ee;
-    box-shadow: 0px 0px 100px #8158ee , inset 0px 0px 10px #8158ee,0px 0px 5px rgb(255, 255, 255);
-  }
+    100% {
+        border: 2px solid #8158ee;
+        box-shadow: 0px 0px 100px #8158ee, inset 0px 0px 10px #8158ee, 0px 0px 5px rgb(255, 255, 255);
+    }
 }
 
 @keyframes iconflicker {
-  0% {
-    opacity: 1;
-  }
+    0% {
+        opacity: 1;
+    }
 
-  5% {
-    opacity: 0.2;
-  }
+    5% {
+        opacity: 0.2;
+    }
 
-  10% {
-    opacity: 1;
-  }
+    10% {
+        opacity: 1;
+    }
 
-  25% {
-    opacity: 0.2;
-  }
+    25% {
+        opacity: 0.2;
+    }
 
-  30% {
-    opacity: 1;
-  }
+    30% {
+        opacity: 1;
+    }
 
-  100% {
-    opacity: 1;
-  }
+    100% {
+        opacity: 1;
+    }
 }
 
-.resett:hover{
-  transform: scale(1.1);
-  transition: 0.5s ease-in-out;
-  cursor: pointer;
+.resett:hover {
+    transform: scale(1.1);
+    transition: 0.5s ease-in-out;
+    cursor: pointer;
 }
 
-#lottie{
-  position: absolute;
+#lottie {
+    position: absolute;
 }
