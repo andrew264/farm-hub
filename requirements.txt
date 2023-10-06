@@ -11,3 +11,4 @@ requests
 pandas
 httpx
 translate
+gunicorn
