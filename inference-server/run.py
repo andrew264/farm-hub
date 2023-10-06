@@ -13,7 +13,7 @@ from ctransformers import AutoModelForCausalLM
 from translate import Translator
 
 from model import EffNet
-from server_utils import get_tokens, split_and_translate
+from server_utils import get_tokens, split_and_translate, translate_to_english
 from types_and_constants import Dialog, DEFAULT_SYSTEM_PROMPT, ImageResult
 from utils import enable_memory_growth
 
@@ -59,6 +59,7 @@ class RequestHandler(http.server.SimpleHTTPRequestHandler):
         self.send_header('Content-Type', 'text/plain')
         self.end_headers()
         input_message = input_json.get('message', '')
+        input_message = translate_to_english(input_message)
         input_image = input_json.get('image', None)
         reset_dialog = input_json.get('reset_dialog', False)
         language = input_json.get('language', 'en')

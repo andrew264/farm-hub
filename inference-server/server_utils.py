@@ -1,5 +1,6 @@
 import re
 
+from langdetect import detect
 from translate import Translator
 
 from types_and_constants import Dialog, BOS, EOS, B_INST, E_INST, B_SYS, E_SYS
@@ -55,3 +56,18 @@ def split_and_translate(input_text: str, translator: Translator, max_chunk_lengt
     translated_output = " ".join(translated_chunks)
 
     return translated_output
+
+
+def translate_to_english(text: str) -> str:
+    # Detect the language of the input text
+    detected_language = detect(text)
+    print(f"Detected language: {detected_language}")
+
+    # If the detected language is not English, translate to English
+    if detected_language != "en":
+        translator = Translator(to_lang="en", from_lang=detected_language)
+        translated_text = translator.translate(text)
+        print(f"Translated text: {translated_text}")
+        return translated_text
+    else:
+        return text
