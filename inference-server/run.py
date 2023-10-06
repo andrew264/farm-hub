@@ -66,7 +66,8 @@ class RequestHandler(http.server.SimpleHTTPRequestHandler):
         reset_dialog = input_json.get('reset_dialog', False)
         language = input_json.get('language', 'en')
         gimme_video = True
-        no_no_words = ['contain', 'image', 'picture', 'photo', 'pic', 'photo', 'show', 'display', 'hi', 'hello']
+        no_no_words = ['contain', 'image', 'picture', 'photo', 'pic', 'photo', 'show', 'display', 'hi', 'hello', 'hey',
+                       'ok', 'thanks', 'you']
         if any(word in input_message.lower().split() for word in no_no_words):
             gimme_video = False
         if reset_dialog:
