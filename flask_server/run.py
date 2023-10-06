@@ -23,7 +23,7 @@ if os.path.exists(CONFIG):
 else:
     with open(CONFIG, 'w') as c:
         json.dump({'ip': IP, 'port': PORT}, c, indent=4)
-SERVER_URL = f'http://{IP}:{PORT}/'
+INFERENCE_SERVER_URL = f'http://{IP}:{PORT}/'
 
 
 async def get_inference_output():
@@ -37,13 +37,13 @@ async def get_inference_output():
     output_text = ''
     async with httpx.AsyncClient() as client:
         try:
-            response = await client.post(SERVER_URL, json=input_data, timeout=40.0)
+            response = await client.post(INFERENCE_SERVER_URL, json=input_data, timeout=40.0)
 
             if response.status_code == 200:
                 async for chunk in response.aiter_bytes(1):
                     if chunk:
-                        print(chunk.decode('utf-8'), end="", flush=True)
-                        output_text += chunk.decode('utf-8')
+                        # print(chunk.decode('utf-8'), end="", flush=True)
+                        output_text += chunk.decode('utf-8', errors='ignore')
             else:
                 print(f"Request failed with status code {response.status_code}: {response.text}")
         except httpx.TimeoutException as exc:

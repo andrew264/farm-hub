@@ -9,6 +9,7 @@ import numpy as np
 import pandas as pd
 from PIL import Image
 from ctransformers import AutoModelForCausalLM
+from translate import Translator
 
 from model import EffNet
 from server_utils import get_tokens
@@ -23,6 +24,11 @@ dialog: Dialog = [
     {"role": "system", "content": DEFAULT_SYSTEM_PROMPT, },
 ]
 
+translators = {
+    'en': None,
+    'es': None,
+    'fr': None,
+}
 
 def get_image_class_and_description(class_num: int) -> ImageResult:
     row = plants_dataframe.iloc[class_num]
@@ -55,6 +61,7 @@ class RequestHandler(http.server.SimpleHTTPRequestHandler):
         input_message = input_json.get('message', '')
         input_image = input_json.get('image', None)
         reset_dialog = input_json.get('reset_dialog', False)
+        language = input_json.get('language', 'en')
         if reset_dialog:
             dialog.clear()
             dialog.append({"role": "system", "content": DEFAULT_SYSTEM_PROMPT, })
@@ -71,8 +78,15 @@ class RequestHandler(http.server.SimpleHTTPRequestHandler):
                            top_p=0.9, temperature=1.2, batch_size=1,
                            max_new_tokens=512, ):
             out += token
-            self.wfile.write(token.encode('utf-8'))
+            if language == 'en':
+                self.wfile.write(token.replace('</s>', '').encode('utf-8'))
         dialog.append({"role": "assistant", "content": out, })
+        # translate out
+        if language != 'en':
+            if translators[language] is None:
+                translators[language] = Translator(to_lang=language)
+            out = translators[language].translate(out)
+            self.wfile.write(out.encode('utf-8'))
 
 
 if __name__ == "__main__":

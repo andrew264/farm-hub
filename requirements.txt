@@ -10,3 +10,4 @@ flask[async]
 requests
 pandas
 httpx
+translate
