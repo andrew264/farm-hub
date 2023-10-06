@@ -41,10 +41,7 @@ async def get_inference_output(language='en'):
             response = await client.post(INFERENCE_SERVER_URL, json=input_data, timeout=40.0)
 
             if response.status_code == 200:
-                async for chunk in response.aiter_bytes(1):
-                    if chunk:
-                        # print(chunk.decode('utf-8'), end="", flush=True)
-                        output_text += chunk.decode('utf-8', errors='ignore')
+                output_text = response.text
             else:
                 print(f"Request failed with status code {response.status_code}: {response.text}")
         except httpx.TimeoutException as exc:
