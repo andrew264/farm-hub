@@ -78,6 +78,8 @@ async def download_file(name):
 @app.route('/upload', methods=['POST'])
 async def upload():
     message = request.form.get('message', '')
+    langSelect = request.form.get('langSelect', 'No Lang')
+    print(langSelect)
 
     if 'file' in request.files:
         image = request.files['file']
