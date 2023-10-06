@@ -104,6 +104,9 @@ def get_recommended_video(title: str, language: str = 'en') -> Tuple[str, str]:
         'kn': 'Kannada',
         'ml': 'Malayalam',
         'pa': 'Punjabi',
+        'ja': 'Japanese',
+        'ar': 'Arabic',
+        'zh': 'Chinese',
     }
     result = VideosSearch(title + f" in {language_code_to_language[language]}", limit=1).result()
     video_title = result["result"][0]["title"]
