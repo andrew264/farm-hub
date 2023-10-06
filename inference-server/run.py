@@ -67,7 +67,7 @@ class RequestHandler(http.server.SimpleHTTPRequestHandler):
         language = input_json.get('language', 'en')
         gimme_video = True
         no_no_words = ['contain', 'image', 'picture', 'photo', 'pic', 'photo', 'show', 'display', 'hi', 'hello', 'hey',
-                       'ok', 'thanks', 'you']
+                       'ok', 'thanks', 'you', 'contents', 'content']
         if any(word in input_message.lower().split() for word in no_no_words):
             gimme_video = False
         if reset_dialog:
@@ -82,6 +82,7 @@ class RequestHandler(http.server.SimpleHTTPRequestHandler):
             video_title, video_url = '', ''
         if input_image is not None:
             res = infer_image(input_image)
+            print(f'Image result: {res}')
             dialog.append({"role": "user", "content": f"{res}\n{input_message}", })
         else:
             dialog.append({"role": "user", "content": input_message, })
