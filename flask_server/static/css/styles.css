@@ -11,6 +11,12 @@
   padding: 0;
 }
 
+.container{
+  display: flex;
+    flex-direction: column;
+    height: 100%;
+}
+
 .headd{
   text-align: center;
   font-family: myFont;
@@ -20,20 +26,51 @@
   position: sticky;
 }
 
+body, html{
+    margin: 0;
+    padding: 0;
+    height: 100%
+}
+
 body {
+  background-size: cover;
+  background-blend-mode: lighten;
   background-color: black;
-  color: azure;
+  color: black;
+  background-image: url("../assets/BG.jpg");
+    background-repeat: no-repeat;
   font-family: 'Poppins', sans-serif;
-  max-height: 100vh;
 }
 #chat-container{
+  background-color: rgba(0, 0, 0, 0.5);
+  box-shadow: inset 0 0 10px #311b0b;
   padding-left: 35px;
   padding-right: 35px;
-  padding-bottom: 50px
+  padding-bottom: 500px;
+  margin-bottom: 110px;
+  flex-grow: 1; /* This allows the content to take up remaining space */
+  overflow-y: auto; /* Enables vertical scrolling for content */
+  padding: 20px;
 }
+
 #chat-container li {
-  padding-bottom: 25px;
+  border-radius: 10px;
+  padding-bottom: 2px;
+  margin-bottom: 10px;
+  padding-top: 5px;
+  padding-left: 10px;
+  padding-right: 10px;
   list-style-type: none;
+}
+
+.bot{
+  background-color: #1C1A1C;
+}
+
+.user{
+  padding-left: 5px;
+  background-color:rgba(5, 255, 51, 0.614);
+  box-shadow: .4em .4em black;
 }
 
 form {
@@ -52,7 +89,6 @@ form {
 }
 
 .formContainer{
-  position: static;
   bottom: 0px;
   display: flex;
   justify-content: center;
@@ -213,4 +249,8 @@ form {
   transform: scale(1.1);
   transition: 0.5s ease-in-out;
   cursor: pointer;
+}
+
+#lottie{
+  position: absolute;
 }
