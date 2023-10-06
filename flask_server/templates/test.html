@@ -4,118 +4,53 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
+    <link href="{{ url_for('static', filename='css/styles.css') }}" rel="stylesheet">
+    <script src="{{ url_for('static', filename='js/scripts.js') }}"></script>
 </head>
 <body>
+    <div class="formContainer">
+        <form action="/upload" method="post" enctype="multipart/form-data">
+        <div id="inputs">
+            <div>
+                <!--<label for="message" id="formMsg">Enter a message:</label>-->
+                <input type="text" placeholder="Enter Your message" id="message" name="message" autocomplete="off" required>
+            </div>
+            
+            <div class="input-div">
+                <input class="input" id="image" name="file" type="file" accept="image">
+                <svg xmlns="http://www.w3.org/2000/svg" width=".9em" height=".9em" stroke-linejoin="round" stroke-linecap="round" viewBox="0 0 24 24" stroke-width="2" fill="none" stroke="currentColor" class="icon"><polyline points="16 16 12 12 8 16"></polyline><line y2="21" x2="12" y1="12" x1="12"></line><path d="M20.39 18.39A5 5 0 0 0 18 9h-1.26A8 8 0 1 0 3 16.3"></path><polyline points="16 16 12 12 8 16"></polyline></svg>
+            </div>
     
-    <body>
-        <div id="chat-container">
-            <div id="chat"></div>
-            <div id="imgContainer"></div>
+            <select id="langSelect" name="langSelect">
+                    <option value="en">English</option>
+                    <option value="es">Español</option>
+                    <option value="fr">Français</option>
+                    <option value="hi">हिन्दी (Hindi)</option>
+                    <option value="bn">বাংলা (Bengali)</option>
+                    <option value="te">తెలుగు (Telugu)</option>
+                    <option value="mr">मराठी (Marathi)</option>
+                    <option value="ta">தமிழ் (Tamil)</option>
+                    <option value="ur">اردو (Urdu)</option>
+                    <option value="gu">ગુજરાતી (Gujarati)</option>
+                    <option value="kn">ಕನ್ನಡ (Kannada)</option>
+                    <option value="ml">മലയാളം (Malayalam)</option>
+                    <option value="pa">ਪੰਜਾਬੀ (Punjabi)</option>
+            </select>
+    
+            <div>
+                <img src="../static/assets/Reset.png" width="50px" alt="Reset">
+            </div>
+    
+            <div class="butt">
+                <button class="btn">
+                    <svg height="24" width="24" fill="#FFFFFF" viewBox="0 0 24 24" data-name="Layer 1" id="Layer_1" class="sparkle">
+                        <path d="M10,21.236,6.755,14.745.264,11.5,6.755,8.255,10,1.764l3.245,6.491L19.736,11.5l-6.491,3.245ZM18,21l1.5,3L21,21l3-1.5L21,18l-1.5-3L18,18l-3,1.5ZM19.333,4.667,20.5,7l1.167-2.333L24,3.5,21.667,2.333,20.5,0,19.333,2.333,17,3.5Z"></path>
+                    </svg>
+                    <input type="submit" class="text" style="background: transparent; border: none;" value="Send"/>
+                </button>
+            </div>    
         </div>
-        <form id="chat-form">
-            <input type="text" id="user-input" placeholder="Type your message...">
-            <input type="file" name="image" id="image">
-            <button type="submit">Send</button>
         </form>
-    
-        <script>
-            // JavaScript code to handle user input and display chat
-            const chatContainer = document.getElementById('chat');
-            const chatForm = document.getElementById('chat-form');
-            const userInput = document.getElementById('user-input');
-            const  image = document.getElementById('image');
-            const form = document.getElementsByName('form');
-
-    
-chatForm.addEventListener('submit', (e) => {
-    e.preventDefault();
-    const userMessage = userInput.value;
-    appendMessage('User', userMessage);
-
-    const imageFile = image.files[0];
-    if (imageFile) {
-        const reader = new FileReader();
-        reader.onload = (event) => {
-            const imageSrc = event.target.result;
-            appendImage('User', imageSrc);
-            fetchBotResponse(userMessage, imageSrc)
-            .then(botResponse => {
-                    appendMessage('Bot', botResponse);
-                    chatForm.reset(); // Reset the form after the bot response is received
-                })
-            .catch(error => {
-                console.error(error);
-            });
-        };
-        reader.readAsDataURL(imageFile);
-    } else {
-        fetchBotResponse(userMessage)
-            .then(botResponse => {
-                appendMessage('Bot', botResponse);
-                chatForm.reset(); // Reset the form after the bot response is received
-            })
-            .catch(error => {
-                console.error(error);
-            });
-    }
-});
-
-function appendMessage(sender, message) {
-    const messageElement = document.createElement('div');
-    messageElement.textContent = `${sender}: ${message}`;
-    chatContainer.appendChild(messageElement);
-}
-
-function appendImage(sender, imageSrc) {
-    const imageElement = document.createElement('img');
-    imageElement.src = imageSrc;
-    imageElement.alt = `${sender}'s image`;
-    imageElement.width = 200;
-    imageElement.height = 200;
-    chatContainer.appendChild(imageElement);
-}
-
-
-function fetchBotResponse(userMessage, imageSrc) {
-    // Send the user's message and image to the server for processing (via AJAX or WebSocket)
-    // Upon receiving a response from your chatbot, append it to the chat
-    // You can use AJAX or WebSocket to asynchronously communicate with the server
-    // and append the bot's response to the chat container.
-    // Here's a simplified example:
-
-    // Assume you have a function fetchBotResponse() that fetches the response from the server
-    // and returns a Promise that resolves with the bot's response
-    fetchBotResponseFromServer(userMessage, imageSrc)
-        .then(botResponse => {
-            appendMessage('Bot', botResponse);
-        })
-        .catch(error => {
-            console.error(error);
-        });
-}
-
-function fetchBotResponseFromServer(userMessage, imageSrc) {
-    // Use fetch() or WebSocket to send the user's message and image to the server
-    // and receive the bot's response
-    // Here's a simplified example using fetch():
-    const formData = new FormData();
-    formData.append('message', userMessage);
-    if (imageSrc) {
-        formData.append('image', imageSrc);
-    }
-    return fetch('/chatbot', {
-        method: 'POST',
-        body: formData
-    })
-    .then(response => {
-        if (!response.ok) {
-            throw new Error('Failed to fetch bot response');
-        }
-        return response.text();
-    });
-}
-        </script>
-    </body>
-
+    </div>
 </body>
 </html>

@@ -45,7 +45,7 @@ form {
   border-radius: 20px;
   padding: 1rem .7rem 0rem .7rem;
   font-size: 1.125rem;
-  width: 800px;
+  width: 1000px;
   max-width: 1500px;
   color: black;
   margin: 0;  
@@ -207,4 +207,10 @@ form {
   100% {
     opacity: 1;
   }
+}
+
+.resett:hover{
+  transform: scale(1.1);
+  transition: 0.5s ease-in-out;
+  cursor: pointer;
 }
