@@ -46,9 +46,9 @@ async def get_inference_output(language='en'):
         except httpx.TimeoutException as exc:
             print(f"Request timed out: {exc}")
             return
-    output_text = output_json.get('message', '')
-    video_title = output_json.get('video_title', '')
-    video_url = output_json.get('video_url', '')
+    output_text: str = output_json.get('message', '')
+    video_title: str = output_json.get('video_title', '')
+    video_url: str = output_json.get('video_url', '')
     chat_messages.append(('bot', output_text, '', video_title, video_url))
 
 
