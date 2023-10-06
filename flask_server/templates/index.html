@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Farm-HUB</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <script src="https://unpkg.com/@lottiefiles/lottie-player@latest/dist/lottie-player.js"></script>
     <link href="{{ url_for('static', filename='css/styles.css') }}" rel="stylesheet">
     <script src="{{ url_for('static', filename='js/scripts.js') }}"></script>
@@ -81,6 +82,7 @@
                 <a class="resett" style="align-items: center;" href="/reset">
                     <img src="../static/assets/Reset.png" width="25px" alt="Reset">
                 </a>
+                <i class="fa fa-microphone mic" style="font-size:24px" onclick="startSpeechRecognition()"></i>
 
                 <div class="butt">
                     <button class="btn">

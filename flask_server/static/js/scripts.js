@@ -123,7 +123,7 @@ function startSpeechRecognition() {
 
     recognition.onresult = function(event) {
         const speechResult = event.results[event.results.length - 1][0].transcript;
-        document.getElementById('inputField').value = speechResult;
+        document.getElementById('message').value = speechResult;
         clearTimeout(timeoutId);
         timeoutId = setTimeout(function() {
             recognition.stop();

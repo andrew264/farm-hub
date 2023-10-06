@@ -71,6 +71,10 @@ li {
     box-shadow: .4em .4em black;
 }
 
+#inputs{
+    vertical-align: text-top;
+}
+
 .user {
     padding-left: 5px;
     background-color: rgba(5, 255, 51, 0.614);
@@ -104,7 +108,7 @@ form {
 }
 
 #inputs {
-    justify-content: space-between;
+    justify-content: center;
     padding-bottom: 25px;
     display: flex;
 
