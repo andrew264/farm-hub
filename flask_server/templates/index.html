@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Farm-HUB</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <script src="https://unpkg.com/@lottiefiles/lottie-player@latest/dist/lottie-player.js"></script>
     <link href="{{ url_for('static', filename='css/styles.css') }}" rel="stylesheet">
     <script src="{{ url_for('static', filename='js/scripts.js') }}"></script>
@@ -19,15 +20,21 @@
             <li class="{{ user }}">{{ content }}</li>
             {% if image != '' %}
             <li class="{{ user }}">
-                <img style="max-width: 300px; max-height: 300px"
+                <img style="max-width: 300px; max-height: 300px; border-radius: 10px;"
                      src="{{ url_for('download_file', name=image) }}" alt="User Image">
             </li>
             {% endif %}
             {% if video_url != '' %}
             <li class="{{ user }}">
-                <iframe width="300" height="300" src="{{ video_url }}" frameborder="0"
+                <div class="frame">
+                    <iframe width="600" height="300" src="{{ video_url }}" frameborder="0"
                         allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture"
                         allowfullscreen></iframe>
+                    <div style="text-align: center; top: 50%;">
+                        <h1 style="vertical-align: middle;">"{{ video_title }}"</h1>
+                        <p style="vertical-align: middle;"><i>A Quick Guide for your Request <br> Hope this helps !</i></p>
+                    </div>
+                </div>
             </li>
             {% endif %}
             {% endfor %}
@@ -70,11 +77,15 @@
                     <option value="kn">ಕನ್ನಡ (Kannada)</option>
                     <option value="ml">മലയാളം (Malayalam)</option>
                     <option value="pa">ਪੰਜਾਬੀ (Punjabi)</option>
+                    <option value="ja">日本語 (Japanese)</option>
+                    <option value="ar">العربية (Arabic)</option>
+                    <option value="zh">中文 (Chinese)</option>
                 </select>
 
                 <a class="resett" style="align-items: center;" href="/reset">
                     <img src="../static/assets/Reset.png" width="25px" alt="Reset">
                 </a>
+                <i class="fa fa-microphone mic" style="font-size:24px" onclick="startSpeechRecognition()"></i>
 
                 <div class="butt">
                     <button class="btn">
