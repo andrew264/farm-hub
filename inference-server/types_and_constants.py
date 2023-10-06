@@ -30,6 +30,8 @@ class ImageResult:
         if self.disease_name is not None:
             disease_name = self.disease_name.replace("_", " ").lower()
             out_str += f"with {disease_name} disease\n"
+        else:
+            out_str += "without any disease\n"
         if self.description is not None:
             out_str += f"image description: {self.description}\n"
         return out_str

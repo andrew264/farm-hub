@@ -19,7 +19,6 @@ from translate import Translator
 from model import CNeXt
 from server_utils import get_tokens, split_and_translate, translate_to_english, get_recommended_video
 from types_and_constants import Dialog, DEFAULT_SYSTEM_PROMPT, ImageResult
-from utils import enable_memory_growth
 
 model = None
 image_model = None
@@ -68,7 +67,7 @@ class RequestHandler(http.server.SimpleHTTPRequestHandler):
         language = input_json.get('language', 'en')
         gimme_video = True
         no_no_words = ['contain', 'image', 'picture', 'photo', 'pic', 'photo', 'show', 'display', 'hi', 'hello', 'hey',
-                       'ok', 'thanks', 'you', 'contents', 'content']
+                       'ok', 'thanks', 'you', 'contents', 'content', 'more', 'less', 'fewer', 'few', 'little', 'lot',]
         if any(word in input_message.lower().split() for word in no_no_words):
             gimme_video = False
         if reset_dialog:
@@ -116,7 +115,6 @@ if __name__ == "__main__":
     print('Loading image model...')
     with open("models/num_classes.txt", "r") as f:
         num_classes = int(f.read())
-    # enable_memory_growth()  # enable memory growth for GPU so TensorFlow doesn't eat all the memory
     with tf.device('/CPU:0'):
         image_model = CNeXt(num_classes=num_classes)
         image_model.build((1, 256, 256, 3))
