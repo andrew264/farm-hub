@@ -76,17 +76,8 @@ class RequestHandler(http.server.SimpleHTTPRequestHandler):
 
 
 if __name__ == "__main__":
-    CONFIG = 'config.json'
-    IP = 'localhost'
-    PORT = 8000
-    if os.path.exists(CONFIG):
-        with open(CONFIG, 'r') as c:
-            config = json.load(c)
-            IP = config.get('ip', IP)
-            PORT = config.get('port', PORT)
-    else:
-        with open(CONFIG, 'w') as c:
-            json.dump({'ip': IP, 'port': PORT}, c, indent=4)
+    IP = '0.0.0.0'
+    PORT = 6969
 
     print('Loading LLaMA...')
     model = AutoModelForCausalLM.from_pretrained("./Bloke/model.gguf",

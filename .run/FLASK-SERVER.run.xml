@@ -1,6 +1,5 @@
 <component name="ProjectRunConfigurationManager">
   <configuration default="false" name="FLASK-SERVER" type="Python.FlaskServer">
-    <option name="flaskDebug" value="true" />
     <module name="farm-hub" />
     <option name="target" value="$PROJECT_DIR$/flask_server/run.py" />
     <option name="targetType" value="PATH" />

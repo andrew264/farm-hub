@@ -108,4 +108,4 @@ if __name__ == '__main__':
 
     os.mkdir(CACHE_DIR)
 
-    app.run(port=5000, debug=True)
+    app.run(host='0.0.0.0', port=5000,)
