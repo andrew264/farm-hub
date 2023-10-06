@@ -97,8 +97,8 @@ def get_recommended_video(title: str, language: str = 'en') -> Tuple[str, str]:
         'ml': 'Malayalam',
         'pa': 'Punjabi',
     }
-    result = VideosSearch(title, limit=1).result()
-    video_title = result["result"][0]["title"] + f" ({language_code_to_language[language]})"
+    result = VideosSearch(title + f" in {language_code_to_language[language]}", limit=1).result()
+    video_title = result["result"][0]["title"]
     video_id = result["result"][0]["id"]
     embed_url = f"https://www.youtube.com/embed/{video_id}"
     return video_title, embed_url

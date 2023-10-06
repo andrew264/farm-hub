@@ -76,7 +76,7 @@ class RequestHandler(http.server.SimpleHTTPRequestHandler):
             return
         input_message = translate_to_english(input_message)
         if gimme_video:
-            video_title, video_url = get_recommended_video(input_message)
+            video_title, video_url = get_recommended_video(input_message, language=language)
         else:
             video_title, video_url = '', ''
         if input_image is not None:

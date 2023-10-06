@@ -57,8 +57,7 @@ async def reset_dialog():
     input_data = {'reset_dialog': True}
     async with httpx.AsyncClient() as client:
         try:
-            response = await client.post(INFERENCE_SERVER_URL, json=input_data, timeout=4.0)
-            print(response.status_code, response.text)
+            await client.post(INFERENCE_SERVER_URL, json=input_data, timeout=4.0)
         except httpx.TimeoutException as exc:
             print(f"Request timed out: {exc}")
 
