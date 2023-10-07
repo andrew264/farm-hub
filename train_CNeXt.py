@@ -2,9 +2,8 @@ import tensorflow as tf
 from keras.optimizers import Lion
 
 from model import CNeXt
-from utils import enable_memory_growth
 
-enable_memory_growth()
+
 # tf.keras.mixed_precision.set_global_policy('mixed_bfloat16')
 print(f"Global dtype policy: {tf.keras.mixed_precision.global_policy()}")
 # tf.config.run_functions_eagerly(True)
@@ -39,5 +38,5 @@ if __name__ == '__main__':
                   metrics=['accuracy'], jit_compile=True)
     model.summary()
 
-    model.fit(train_dataset, epochs=3, validation_data=val_dataset)
+    model.fit(train_dataset, epochs=5, validation_data=val_dataset)
     model.save_weights('./models/CNeXt.h5')
