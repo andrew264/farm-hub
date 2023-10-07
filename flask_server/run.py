@@ -16,7 +16,7 @@ CONFIG = 'config.json'
 IP = 'localhost'
 PORT = 8000
 if os.path.exists(CONFIG):
-    with open(CONFIG, 'r') as c:
+    with open(CONFIG, 'r')   as c:
         config = json.load(c)
         IP = config.get('ip', IP)
         PORT = config.get('port', PORT)

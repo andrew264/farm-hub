@@ -7,6 +7,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <script src="https://unpkg.com/@lottiefiles/lottie-player@latest/dist/lottie-player.js"></script>
     <link href="{{ url_for('static', filename='css/styles.css') }}" rel="stylesheet">
+    <script src='https://kit.fontawesome.com/a076d05399.js' crossorigin='anonymous'></script>
 </head>
 <body>
 <div class="container">
@@ -16,7 +17,11 @@
     <div id="chat-container">
         <ul id="chat-messages">
             {% for user, content, image, video_title, video_url in chat_messages %}
-            <li class="{{ user }}">{{ content }}</li>
+            <li class="{{ user }}">{{ content }}
+                {% if user == 'bot' %}
+                
+                {% endif %}
+            </li>
             {% if image != '' %}
             <li class="{{ user }}">
                 <img style="max-width: 300px; max-height: 300px; border-radius: 10px;"
@@ -35,6 +40,7 @@
                     </div>
                 </div>
             </li>
+
             {% endif %}
             {% endfor %}
         </ul>

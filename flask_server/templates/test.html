@@ -3,37 +3,31 @@
 <head>
     <title>Speech Recognition Example</title>
     <script>
-        function startSpeechRecognition() {
-            const recognition = new webkitSpeechRecognition();
-            recognition.continuous = true;
-            recognition.interimResults = true;
-            recognition.lang = 'en-US';
+    const bot = document.querySelector(".bot");
 
-            let timeoutId;
+    bot.forEach(elem => {
+    const message = elem.textContent;
+    const image = document.createElement("img");
+    image.src = "../assets/Reset.png";
+    image.alt = "Speaker Icon";
+    elem.innerHTML = lorem;
+    elem.appendChild(image);
+});
 
-            recognition.onresult = function(event) {
-                const speechResult = event.results[event.results.length - 1][0].transcript;
-                document.getElementById('inputField').value = speechResult;
-                clearTimeout(timeoutId);
-                timeoutId = setTimeout(function() {
-                    recognition.stop();
-                    startSpeechRecognition();
-                }, 3000);
-            };
-
-            recognition.onend = function() {
-                clearTimeout(timeoutId);
-                timeoutId = setTimeout(function() {
-                    startSpeechRecognition();
-                }, 3000);
-            };
-
-            recognition.start();
-        }
+    function onn(){
+        const pp = document.getElementById("pp");
+        pp.innerHTML= "lorem ipsum "
+    }
     </script>
 </head>
 <body>
     <input type="text" id="inputField">
-    <button onclick="startSpeechRecognition()">Start Speech Recognition</button>
+    <button onclick="onn()">submit</button>
+    <p class="bot">hola amigo</p>
+    <p class="bot">hola amigo</p>
+    <p class="bot">hola amigo</p>
+    <p class="bot">hola amigo</p>
+    <p class="bot">hola amigo</p>
+
 </body>
 </html>

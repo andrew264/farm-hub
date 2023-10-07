@@ -89,3 +89,35 @@ function startSpeechRecognition() {
 
     recognition.start();
 }
+
+
+// bot.forEach(elem => {
+//     const message = elem.textContent;
+//     const image = document.createElement("img");
+//     //image.src = "../static/assets/volume.png";
+//     image.width = 
+//     image.alt = "Speaker Icon";
+//     elem.innerHTML = message;
+//     elem.appendChild(image);
+// });
+
+const voice = document.getElementsByClassName('speaker');
+
+function speak(text) {
+    const bott = document.getElementsByClassName('bot');
+    const utterance = new SpeechSynthesisUtterance(text);
+    speechSynthesis.speak(utterance);
+}
+
+window.onload = function() {
+    const listItems = document.querySelectorAll('.bot');
+    listItems.forEach(function(item) {
+        const button = document.createElement('button');
+        button.style.backgroundColor = 'transparent';
+        button.innerHTML = '<span class="speaker"><img src="../static/assets/volume.png" width="25px" ></span>';
+        button.addEventListener('click', function() {
+            speak(item.textContent);
+        });
+        item.appendChild(button);
+    });
+};
