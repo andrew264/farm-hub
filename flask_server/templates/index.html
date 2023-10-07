@@ -7,7 +7,6 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <script src="https://unpkg.com/@lottiefiles/lottie-player@latest/dist/lottie-player.js"></script>
     <link href="{{ url_for('static', filename='css/styles.css') }}" rel="stylesheet">
-    <script src="{{ url_for('static', filename='js/scripts.js') }}"></script>
 </head>
 <body>
 <div class="container">
@@ -43,7 +42,7 @@
     <div class="formContainer">
         <!--<lottie-player id="lottie" src="../static/assets/farmer.json" background="transparent"  speed="1"  style="width: 300px; height: 300px;" loop autoplay></lottie-player>-->
 
-        <form action="/upload" method="post" enctype="multipart/form-data">
+        <form action="/upload" method="post" enctype="multipart/form-data" id="myForm">
             <div id="inputs" class="">
                 <div>
                     <!--<label for="message" id="formMsg">Enter a message:</label>-->
@@ -63,7 +62,8 @@
                     </svg>
                 </div>
 
-                <select id="langSelect" name="langSelect">
+                <label for="langSelect">
+                    <select id="langSelect" name="langSelect">
                     <option value="en">English</option>
                     <option value="es">Español</option>
                     <option value="fr">Français</option>
@@ -80,7 +80,8 @@
                     <option value="ja">日本語 (Japanese)</option>
                     <option value="ar">العربية (Arabic)</option>
                     <option value="zh">中文 (Chinese)</option>
-                </select>
+                    </select>
+                </label>
 
                 <a class="resett" style="align-items: center;" href="/reset">
                     <img src="../static/assets/Reset.png" width="25px" alt="Reset">
@@ -93,12 +94,13 @@
                              class="sparkle">
                             <path d="M10,21.236,6.755,14.745.264,11.5,6.755,8.255,10,1.764l3.245,6.491L19.736,11.5l-6.491,3.245ZM18,21l1.5,3L21,21l3-1.5L21,18l-1.5-3L18,18l-3,1.5ZM19.333,4.667,20.5,7l1.167-2.333L24,3.5,21.667,2.333,20.5,0,19.333,2.333,17,3.5Z"></path>
                         </svg>
-                        <input type="submit" class="text" style="background: transparent; border: none;" value="Send"/>
+                        <input type="submit" id="submitButton" class="text" style="background: transparent; border: none;" value="Send"/>
                     </button>
                 </div>
             </div>
         </form>
     </div>
 </div>
+<script src="{{ url_for('static', filename='js/scripts.js') }}"></script>
 </body>
 </html>
