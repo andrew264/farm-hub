@@ -45,6 +45,9 @@ def get_image_class_and_description(class_num: int) -> ImageResult:
 def infer_image(image: str) -> ImageResult:
     image = base64.b64decode(image)
     image = Image.open(BytesIO(image))
+    if image.mode == 'RGBA':
+        image = image.convert('RGB')
+    image = image.resize((256, 256))
     out = np.argmax(image_model.predict(np.array([image])), axis=1)
     return get_image_class_and_description(out[0])
 
