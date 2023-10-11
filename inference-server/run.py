@@ -71,7 +71,8 @@ class RequestHandler(http.server.SimpleHTTPRequestHandler):
         gimme_video = True
         no_no_words = ['contain', 'image', 'picture', 'photo', 'pic', 'photo', 'show', 'display', 'hi', 'hello', 'hey',
                        'ok', 'thanks', 'you', 'contents', 'content', 'more', 'less', 'fewer', 'few', 'little', 'lot',
-                       'what', 'can', 'please', 'thanks', 'thank', 'you', 'help', 'me', 'i', 'want', 'need', 'give',]
+                       'what', 'can', 'please', 'thanks', 'thank', 'you', 'help', 'me', 'i', 'want', 'need', 'give',
+                       'who', 'she', 'he', 'they', 'them', 'am']
         if any(word in input_message.lower().split() for word in no_no_words):
             gimme_video = False
         if reset_dialog:
