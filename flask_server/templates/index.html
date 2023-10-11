@@ -16,56 +16,27 @@
     </header>
     <div id="chat-container">
         <ul id="chat-messages">
-            {% for user, content, image, video_title, video_url in chat_messages %}
-            <li class="{{ user }}">{{ content }}
-                {% if user == 'bot' %}
-                
-                {% endif %}
-            </li>
-            {% if image != '' %}
-            <li class="{{ user }}">
+            {% for msg in messages %}
+            <li class="{{ msg.sender }}">{{ msg.content }}</li>
+            {% if msg.image_base64 %}
+            <li class="{{ msg.sender }}">
                 <img style="max-width: 300px; max-height: 300px; border-radius: 10px;"
-                     src="{{ url_for('download_file', name=image) }}" alt="User Image">
+                     src=" {{ msg.image_base64 }} " alt="User Image">
             </li>
             {% endif %}
-            {% if video_url != '' %}
-            <li class="{{ user }}">
-                <div class="frame">
-                    <iframe width="600" height="300" src="{{ video_url }}" frameborder="0"
-                        allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture"
-                        allowfullscreen></iframe>
-                    <div style="text-align: center; top: 50%;">
-                        <h1 style="vertical-align: middle;">"{{ video_title }}"</h1>
-                        <p style="vertical-align: middle;"><i>A Quick Guide for your Request <br> Hope this helps !</i></p>
-                    </div>
-                </div>
-            </li>
 
-            {% endif %}
             {% endfor %}
         </ul>
     </div>
     <div class="formContainer">
-        <!--<lottie-player id="lottie" src="../static/assets/farmer.json" background="transparent"  speed="1"  style="width: 300px; height: 300px;" loop autoplay></lottie-player>-->
 
-        <form action="/upload" method="post" enctype="multipart/form-data" id="myForm">
+        <form action="/submit" method="post" enctype="multipart/form-data" id="myForm">
             <div id="inputs" class="">
-                <div>
-                    <!--<label for="message" id="formMsg">Enter a message:</label>-->
-                    <input type="text" placeholder="Enter Your message" id="message" name="message" autocomplete="off"
-                           required>
-                </div>
+                <input type="text" placeholder="Enter Your message" id="message" name="message" autocomplete="off"
+                       required>
 
                 <div class="input-div">
-                    <input class="input" id="image" name="file" type="file" accept="image/*">
-                    <svg xmlns="http://www.w3.org/2000/svg" width=".9em" height=".9em" stroke-linejoin="round"
-                         stroke-linecap="round" viewBox="0 0 24 24" stroke-width="2" fill="none" stroke="currentColor"
-                         class="icon">
-                        <polyline points="16 16 12 12 8 16"></polyline>
-                        <line y2="21" x2="12" y1="12" x1="12"></line>
-                        <path d="M20.39 18.39A5 5 0 0 0 18 9h-1.26A8 8 0 1 0 3 16.3"></path>
-                        <polyline points="16 16 12 12 8 16"></polyline>
-                    </svg>
+                    <input class="input" id="image" name="image" type="file" accept="image/*">
                 </div>
 
                 <label for="langSelect">

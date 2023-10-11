@@ -1,111 +1,92 @@
 import base64
-import json
 import os
-import shutil
+from io import BytesIO
 
 import flask
-import httpx
-from flask import request, render_template, send_from_directory, redirect
+import numpy as np
+import pandas as pd
+from PIL import Image
+from flask import render_template, request, redirect
+
+from typin import RenderObj, ImageResult
+
+os.environ['TF_CPP_MIN_LOG_LEVEL'] = '3'
+os.environ['CUDA_VISIBLE_DEVICES'] = '-1'
 
 app = flask.Flask(__name__)
 
-chat_messages = []
-CACHE_DIR = 'temp-files'
-app.config['UPLOAD_FOLDER'] = CACHE_DIR
-CONFIG = 'config.json'
-IP = 'localhost'
-PORT = 8000
-if os.path.exists(CONFIG):
-    with open(CONFIG, 'r')   as c:
-        config = json.load(c)
-        IP = config.get('ip', IP)
-        PORT = config.get('port', PORT)
-else:
-    with open(CONFIG, 'w') as c:
-        json.dump({'ip': IP, 'port': PORT}, c, indent=4)
-INFERENCE_SERVER_URL = f'http://{IP}:{PORT}/'
-print(INFERENCE_SERVER_URL)
+chat_messages: list[RenderObj] = []
+image_classifier = None
+plants_dataframe = pd.read_csv("../datasets/FARM_HUB.csv")
 
 
-async def get_inference_output(language='en'):
-    message, image = chat_messages[-1][1:3]
-    if image == '':
-        image = None
-    else:
-        with open(os.path.join('flask_server', CACHE_DIR, image), 'rb') as f:
-            image = base64.b64encode(f.read()).decode('utf-8')
-    input_data = {'message': message, 'image': image, 'language': language}
-    async with httpx.AsyncClient() as client:
-        try:
-            response = await client.post(INFERENCE_SERVER_URL, json=input_data, timeout=40.0)
+def load_image_classifier():
+    import tensorflow as tf
+    from model import CNeXt
 
-            if response.status_code == 200:
-                output_json = response.json()
-            else:
-                print(f"Request failed with status code {response.status_code}: {response.text}")
-        except httpx.TimeoutException as exc:
-            print(f"Request timed out: {exc}")
-            return
-    output_text: str = output_json.get('message', '')
-    video_title: str = output_json.get('video_title', '')
-    video_url: str = output_json.get('video_url', '')
-    chat_messages.append(('bot', output_text, '', video_title, video_url))
+    with open("../models/num_classes.txt", "r") as f:
+        num_classes = int(f.read())
+
+    with tf.device('/cpu:0'):
+        model = CNeXt(num_classes=num_classes)
+        model.build((1, 256, 256, 3))
+        if os.path.exists('../models/CNeXt.h5'):
+            model.load_weights('../models/CNeXt.h5')
+        else:
+            raise FileNotFoundError('Image model weights not found.')
+    return model
 
 
-async def reset_dialog():
-    chat_messages.clear()
-    input_data = {'reset_dialog': True}
-    async with httpx.AsyncClient() as client:
-        try:
-            await client.post(INFERENCE_SERVER_URL, json=input_data, timeout=4.0)
-        except httpx.TimeoutException as exc:
-            print(f"Request timed out: {exc}")
+def do_dummy_inference():
+    image_classifier.predict(np.zeros((1, 256, 256, 3)))
+
+
+def do_image_inference(image_bytes: bytes) -> ImageResult:
+    image = Image.open(BytesIO(image_bytes))
+    if image.mode != 'RGB':
+        image = image.convert('RGB')
+    image = image.resize((256, 256))
+    out = np.argmax(image_classifier.predict(np.array([image]), verbose=0), axis=1)[0]
+    row = plants_dataframe.iloc[out]
+    class_name = row["CLASS"]
+    plant_name = row["PLANT_NAME"]
+    disease_name = row["DISEASE_NAME"]
+    description = row["DESCRIPTION"]
+    return ImageResult(class_name, plant_name, disease_name, description)
 
 
 @app.route('/')
 async def index():
-    return render_template('index.html', chat_messages=chat_messages)
+    return render_template('index.html', messages=chat_messages)
 
 
-@app.route('/<path:name>')
-async def download_file(name):
-    return send_from_directory(
-        app.config['UPLOAD_FOLDER'], name, as_attachment=True
-    )
-
-
-@app.route('/upload', methods=['POST'])
-async def upload():
+@app.route('/submit', methods=['POST'])
+async def submit():
     message = request.form.get('message', '')
-    langSelect = request.form.get('langSelect', 'No Lang')
+    lang = request.form.get('lang', 'en')
+    image = request.files.get('image', None)
 
-    if 'file' in request.files:
-        image = request.files['file']
+    if image:
+        print(image)
+        image = request.files['image']
+        file_format = image.filename.split('.')[-1]
+        image_bytes = image.read()
+        image_base64 = f'data:image/{file_format};base64,' + base64.b64encode(image_bytes).decode('utf-8')
+        # print(image_base64[:100] + '...')
+        image_result = do_image_inference(image_bytes)
+        print(image_result)
+    else:
+        image_base64 = None
 
-        if image.filename != '':
-            # generate a random filename
-            file_format = image.filename.split('.')[-1]
-            filename = f'{os.urandom(16).hex()}.{file_format}'
-            image.save(os.path.join('flask_server', CACHE_DIR, filename))
-            chat_messages.append(('user', message, filename, '', ''))
-        else:
-            chat_messages.append(('user', message, '', '', ''))
-    await get_inference_output(langSelect)
+    chat_messages.append(RenderObj(content=message, lang=lang, image_base64=image_base64, sender='user'))
 
-    return redirect('/')
-
-
-@app.route('/reset')
-async def reset():
-    await reset_dialog()
     return redirect('/')
 
 
 if __name__ == '__main__':
-
-    if os.path.exists(CACHE_DIR):
-        shutil.rmtree(CACHE_DIR)
-
-    os.mkdir(CACHE_DIR)
+    print(os.getcwd())
+    print('Loading image classifier...')
+    image_classifier = load_image_classifier()
+    do_dummy_inference()
 
     app.run(host='0.0.0.0', port=5000, debug=True)

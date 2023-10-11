@@ -171,23 +171,6 @@ form {
     justify-content: center;
 }
 
-.input-div:hover {
-    animation: flicker 1s ;
-    cursor: pointer;
-}
-
-.input-div {
-    position: relative;
-    width: 35px;
-    height: 35px;
-    border-radius: 50%;
-    border: 2px solid #8158ee;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    overflow: hidden;
-    box-shadow: 0 0 5px #8158ee, inset 0 0 5px #8158ee, 0 0 0 #8158ee;
-}
 
 .icon {
     color: #8158ee;
@@ -197,68 +180,9 @@ form {
 
 .input {
     position: absolute;
-    opacity: 0;
+    opacity: 100;
     width: 100%;
     height: 100%;
-    cursor: pointer !important;
-}
-
-@keyframes flicker {
-    0% {
-        border: 2px solid #8158ee;
-        box-shadow: 0 0 10px #8158ee, inset 0 0 10px #8158ee, 0 0 5px rgb(255, 255, 255);
-    }
-
-    5% {
-        border: none;
-        box-shadow: none;
-    }
-
-    10% {
-        border: 2px solid #8158ee;
-        box-shadow: 0 0 100px #8158ee, inset 0 0 10px #8158ee, 0 0 5px rgb(255, 255, 255);
-    }
-
-    25% {
-        border: none;
-        box-shadow: none;
-    }
-
-    30% {
-        border: 2px solid #8158ee;
-        box-shadow: 0 0 100px #8158ee, inset 0 0 10px #8158ee, 0 0 5px rgb(255, 255, 255);
-    }
-
-    100% {
-        border: 2px solid #8158ee;
-        box-shadow: 0 0 100px #8158ee, inset 0 0 10px #8158ee, 0 0 5px rgb(255, 255, 255);
-    }
-}
-
-@keyframes iconflicker {
-    0% {
-        opacity: 1;
-    }
-
-    5% {
-        opacity: 0.2;
-    }
-
-    10% {
-        opacity: 1;
-    }
-
-    25% {
-        opacity: 0.2;
-    }
-
-    30% {
-        opacity: 1;
-    }
-
-    100% {
-        opacity: 1;
-    }
 }
 
 .resett:hover {
