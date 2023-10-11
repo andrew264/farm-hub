@@ -185,6 +185,19 @@ form {
     height: 100%;
 }
 
+.input-div {
+    position: relative;
+    width: 35px;
+    height: 35px;
+    border-radius: 50%;
+    border: 2px solid #8158ee;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
+    box-shadow: 0 0 5px #8158ee, inset 0 0 5px #8158ee, 0 0 0 #8158ee;
+}
+
 .resett:hover {
     transform: scale(1.1);
     transition: 0.5s ease-in-out;

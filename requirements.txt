@@ -4,14 +4,15 @@ jupyter
 notebook
 numpy
 matplotlib
-ctransformers
+ctransformers[cuda]
 Pillow
 flask[async]
 requests
 pandas
-httpx
 translate
 langdetect
 gunicorn
 youtube-search-python
 websockets
+flask-socketio
+simple-websocket

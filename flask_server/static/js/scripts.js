@@ -23,24 +23,32 @@ const chatContainer = document.getElementById('chat-container');
 const myForm = document.getElementById('myForm');
 const userInput = document.getElementById('message');
 const image = document.getElementById('image');
+const socket = io.connect('http://' + location.hostname + ':' + location.port);
 
-
-myForm.addEventListener('submit', (e) => {
+myForm.addEventListener('submit', async (e) => {
     e.preventDefault();
-    const userMessage = userInput.value;
-    appendMessage(userMessage);
 
     const imageFile = image.files[0];
     if (imageFile) {
+        const imageSrc = await loadImage(imageFile);
+        appendImage(imageSrc);
+    }
+    const userMessage = userInput.value;
+    appendMessage(userMessage);
+    HTMLFormElement.prototype.submit.call(myForm);
+    await fetchBotMessage();
+});
+
+function loadImage(imageFile) {
+    return new Promise((resolve) => {
         const reader = new FileReader();
         reader.onload = (event) => {
             const imageSrc = event.target.result;
-            appendImage(imageSrc);
+            resolve(imageSrc);
         };
         reader.readAsDataURL(imageFile);
-    }
-    HTMLFormElement.prototype.submit.call(myForm);
-});
+    });
+}
 
 function appendMessage(message) {
     const messageElement = document.createElement('li');
@@ -59,6 +67,25 @@ function appendImage(imageSrc) {
     imageElement.height = 300;
     imageLi.appendChild(imageElement);
     chatContainer.appendChild(imageLi);
+}
+
+function createBotMessage() {
+    const messageElement = document.createElement('li');
+    messageElement.className = 'bot'
+    messageElement.innerText = ''
+    chatContainer.appendChild(messageElement);
+    return messageElement;
+}
+
+function fetchBotMessage() {
+    const botElement = createBotMessage();
+
+    return new Promise((resolve) => {
+        socket.on('content', function (data) {
+            botElement.innerText += data;
+            resolve();
+        });
+    });
 }
 
 
@@ -109,13 +136,13 @@ function speak(text) {
     speechSynthesis.speak(utterance);
 }
 
-window.onload = function() {
+window.onload = function () {
     const listItems = document.querySelectorAll('.bot');
-    listItems.forEach(function(item) {
+    listItems.forEach(function (item) {
         const button = document.createElement('button');
         button.style.backgroundColor = 'transparent';
         button.innerHTML = '<span class="speaker"><img src="../static/assets/volume.png" width="25px" ></span>';
-        button.addEventListener('click', function() {
+        button.addEventListener('click', function () {
             speak(item.textContent);
         });
         item.appendChild(button);

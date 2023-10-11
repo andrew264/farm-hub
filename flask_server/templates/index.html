@@ -5,9 +5,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Farm-HUB</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-    <script src="https://unpkg.com/@lottiefiles/lottie-player@latest/dist/lottie-player.js"></script>
     <link href="{{ url_for('static', filename='css/styles.css') }}" rel="stylesheet">
-    <script src='https://kit.fontawesome.com/a076d05399.js' crossorigin='anonymous'></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.7.2/socket.io.min.js"
+            crossorigin="anonymous"></script>
+
 </head>
 <body>
 <div class="container">
@@ -17,14 +18,13 @@
     <div id="chat-container">
         <ul id="chat-messages">
             {% for msg in messages %}
-            <li class="{{ msg.sender }}">{{ msg.content }}</li>
             {% if msg.image_base64 %}
             <li class="{{ msg.sender }}">
                 <img style="max-width: 300px; max-height: 300px; border-radius: 10px;"
                      src=" {{ msg.image_base64 }} " alt="User Image">
             </li>
             {% endif %}
-
+            <li class="{{ msg.sender }}">{{ msg.content }}</li>
             {% endfor %}
         </ul>
     </div>
@@ -41,26 +41,26 @@
 
                 <label for="langSelect">
                     <select id="langSelect" name="langSelect">
-                    <option value="en">English</option>
-                    <option value="es">Español</option>
-                    <option value="fr">Français</option>
-                    <option value="hi">हिन्दी (Hindi)</option>
-                    <option value="bn">বাংলা (Bengali)</option>
-                    <option value="te">తెలుగు (Telugu)</option>
-                    <option value="mr">मराठी (Marathi)</option>
-                    <option value="ta">தமிழ் (Tamil)</option>
-                    <option value="ur">اردو (Urdu)</option>
-                    <option value="gu">ગુજરાતી (Gujarati)</option>
-                    <option value="kn">ಕನ್ನಡ (Kannada)</option>
-                    <option value="ml">മലയാളം (Malayalam)</option>
-                    <option value="pa">ਪੰਜਾਬੀ (Punjabi)</option>
-                    <option value="ja">日本語 (Japanese)</option>
-                    <option value="ar">العربية (Arabic)</option>
-                    <option value="zh">中文 (Chinese)</option>
+                        <option value="en">English</option>
+                        <option value="es">Español</option>
+                        <option value="fr">Français</option>
+                        <option value="hi">हिन्दी (Hindi)</option>
+                        <option value="bn">বাংলা (Bengali)</option>
+                        <option value="te">తెలుగు (Telugu)</option>
+                        <option value="mr">मराठी (Marathi)</option>
+                        <option value="ta">தமிழ் (Tamil)</option>
+                        <option value="ur">اردو (Urdu)</option>
+                        <option value="gu">ગુજરાતી (Gujarati)</option>
+                        <option value="kn">ಕನ್ನಡ (Kannada)</option>
+                        <option value="ml">മലയാളം (Malayalam)</option>
+                        <option value="pa">ਪੰਜਾਬੀ (Punjabi)</option>
+                        <option value="ja">日本語 (Japanese)</option>
+                        <option value="ar">العربية (Arabic)</option>
+                        <option value="zh">中文 (Chinese)</option>
                     </select>
                 </label>
 
-                <a class="resett" style="align-items: center;" href="/reset">
+                <a class="resett" style="align-items: center;" href="/clear">
                     <img src="../static/assets/Reset.png" width="25px" alt="Reset">
                 </a>
                 <i class="fa fa-microphone mic" style="font-size:24px" onclick="startSpeechRecognition()"></i>
@@ -71,7 +71,8 @@
                              class="sparkle">
                             <path d="M10,21.236,6.755,14.745.264,11.5,6.755,8.255,10,1.764l3.245,6.491L19.736,11.5l-6.491,3.245ZM18,21l1.5,3L21,21l3-1.5L21,18l-1.5-3L18,18l-3,1.5ZM19.333,4.667,20.5,7l1.167-2.333L24,3.5,21.667,2.333,20.5,0,19.333,2.333,17,3.5Z"></path>
                         </svg>
-                        <input type="submit" id="submitButton" class="text" style="background: transparent; border: none;" value="Send"/>
+                        <input type="submit" id="submitButton" class="text"
+                               style="background: transparent; border: none;" value="Send"/>
                     </button>
                 </div>
             </div>
