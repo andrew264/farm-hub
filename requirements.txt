@@ -14,3 +14,4 @@ translate
 langdetect
 gunicorn
 youtube-search-python
+websockets

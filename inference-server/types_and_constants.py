@@ -17,6 +17,7 @@ B_INST, E_INST = "[INST]", "[/INST]"
 B_SYS, E_SYS = "<<SYS>>\n", "\n<</SYS>>\n\n"
 BOS, EOS = "<s>", "</s>"
 
+WS_EOS = '//EOS//'
 
 class ImageResult:
     def __init__(self, class_name, plant_name, disease_name: Optional, description: Optional):
