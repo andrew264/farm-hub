@@ -1,6 +1,6 @@
 from typin import Dialog
 
-with open("../sys_prompt.txt", "r") as f:
+with open("sys_prompt.txt", "r") as f:
     DEFAULT_SYSTEM_PROMPT = f.read()
 
 B_INST, E_INST = "[INST]", "[/INST]"

@@ -1,4 +1,10 @@
 {
-  "ip": "127.0.0.1",
-  "port": 6969
+  "image-server": {
+    "port": 12300,
+    "host": "localhost"
+  },
+  "llm-server": {
+    "port": 12301,
+    "host": "localhost"
+  }
 }

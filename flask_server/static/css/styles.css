@@ -123,54 +123,11 @@ form {
     transition: 0.5s ease-in-out;
 }
 
-.btn {
-    border: none;
-    width: 10em;
-    height: 3.5em;
-    border-radius: 3em;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    gap: 12px;
-    background: #1C1A1C;
-    cursor: pointer;
-    transition: all 450ms ease-in-out;
-}
-
-.sparkle {
-    fill: #AAAAAA;
-    transition: all 800ms ease;
-}
-
 .text {
     font-weight: 600;
     color: #AAAAAA;
     font-size: medium;
 }
-
-.btn:hover {
-    background: linear-gradient(0deg, #A47CF3, #683FEA);
-    box-shadow: inset 0 1px 0 0 rgba(255, 255, 255, 0.4),
-    inset 0 -4px 0 0 rgba(0, 0, 0, 0.2),
-    0 0 0 4px rgba(255, 255, 255, 0.2),
-    0 0 180px 0 #9917FF;
-    transform: translateY(-2px);
-}
-
-.btn:hover .text {
-    color: white;
-}
-
-.btn:hover .sparkle {
-    fill: white;
-    transform: scale(1.2);
-}
-
-.butt {
-    display: flex;
-    justify-content: center;
-}
-
 
 .icon {
     color: #8158ee;
@@ -183,19 +140,6 @@ form {
     opacity: 100;
     width: 100%;
     height: 100%;
-}
-
-.input-div {
-    position: relative;
-    width: 35px;
-    height: 35px;
-    border-radius: 50%;
-    border: 2px solid #8158ee;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    overflow: hidden;
-    box-shadow: 0 0 5px #8158ee, inset 0 0 5px #8158ee, 0 0 0 #8158ee;
 }
 
 .resett:hover {

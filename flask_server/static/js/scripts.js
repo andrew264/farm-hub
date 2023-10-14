@@ -20,24 +20,36 @@ langSelect.addEventListener('change', () => {
 
 // JavaScript code to handle user input and display chat
 const chatContainer = document.getElementById('chat-container');
-const myForm = document.getElementById('myForm');
+const submitButton = document.getElementById('submitButton');
 const userInput = document.getElementById('message');
 const image = document.getElementById('image');
 const socket = io.connect('http://' + location.hostname + ':' + location.port);
 
-myForm.addEventListener('submit', async (e) => {
+submitButton.addEventListener('click', async (e) => {
     e.preventDefault();
+    let imageSrc = null;
 
     const imageFile = image.files[0];
     if (imageFile) {
-        const imageSrc = await loadImage(imageFile);
+        imageSrc = await loadImage(imageFile);
         appendImage(imageSrc);
+        if (image.files.length > 0) {
+            // Clear the selected file
+            image.value = '';
+        }
     }
     const userMessage = userInput.value;
+    userInput.value = '';
+    submitToSocket(userMessage, imageSrc);
+
     appendMessage(userMessage);
-    HTMLFormElement.prototype.submit.call(myForm);
     await fetchBotMessage();
 });
+
+function submitToSocket(message, image) {
+    socket.emit('submit', {message, image});
+    console.log('submitted');
+}
 
 function loadImage(imageFile) {
     return new Promise((resolve) => {
@@ -82,6 +94,12 @@ function fetchBotMessage() {
 
     return new Promise((resolve) => {
         socket.on('content', function (data) {
+            botElement.innerText.replaceAll('</s>', '')
+            if (data === '//EOS//') {
+                resolve();
+                socket.off('content');
+                return;
+            }
             botElement.innerText += data;
             resolve();
         });
@@ -117,16 +135,6 @@ function startSpeechRecognition() {
     recognition.start();
 }
 
-
-// bot.forEach(elem => {
-//     const message = elem.textContent;
-//     const image = document.createElement("img");
-//     //image.src = "../static/assets/volume.png";
-//     image.width = 
-//     image.alt = "Speaker Icon";
-//     elem.innerHTML = message;
-//     elem.appendChild(image);
-// });
 
 const voice = document.getElementsByClassName('speaker');
 
