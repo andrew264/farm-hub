@@ -2,14 +2,9 @@
 @import url('https://fonts.googleapis.com/css2?family=Aldrich&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Young+Serif&display=swap');
 
-@font-face {
-    font-family: myFont;
-    src: url('../font/MhokoFree-MVOlr.ttf');
-}
-
-.frame{
-  display: flex;
-  justify-content: space-evenly;
+.frame {
+    display: flex;
+    justify-content: space-evenly;
 }
 
 * {
@@ -23,7 +18,9 @@
     height: 100%;
 }
 
-.headd {
+.header-bar {
+    background-color: black;
+    color: white;
     text-align: center;
     font-family: 'Young Serif', serif;
     text-transform: uppercase;
@@ -43,8 +40,6 @@ body {
     background-blend-mode: lighten;
     background-color: black;
     color: black;
-    background-image: url("../assets/BG.jpg");
-    background-repeat: no-repeat;
     font-family: 'Poppins', sans-serif;
 }
 
@@ -56,9 +51,11 @@ body {
     overflow-y: auto; /* Enables vertical scrolling for content */
     padding: 20px;
 }
+
 li {
     white-space: pre-line;
-  }
+}
+
 #chat-container li {
     border-radius: 10px;
     margin-bottom: 10px;
@@ -74,13 +71,13 @@ li {
     box-shadow: .4em .4em black;
 }
 
-#inputs{
+#inputs {
     vertical-align: text-top;
 }
 
 .user {
     padding-left: 5px;
-    background-color: rgba(5, 255, 51, 0.614);
+    background-color: #1da1f2;
     box-shadow: .4em .4em black;
 }
 
@@ -111,13 +108,13 @@ form {
 }
 
 #inputs {
-    justify-content:space-around;
+    justify-content: space-around;
     padding-bottom: 25px;
     display: flex;
 
 }
 
-.mic:hover{
+.mic:hover {
     cursor: pointer;
     transform: scale(1.05);
     transition: 0.5s ease-in-out;
@@ -129,12 +126,6 @@ form {
     font-size: medium;
 }
 
-.icon {
-    color: #8158ee;
-    font-size: 2rem;
-    cursor: pointer;
-}
-
 .input {
     position: absolute;
     opacity: 100;
@@ -142,12 +133,8 @@ form {
     height: 100%;
 }
 
-.resett:hover {
+.reset-button:hover {
     transform: scale(1.1);
     transition: 0.5s ease-in-out;
     cursor: pointer;
-}
-
-#lottie {
-    position: absolute;
 }

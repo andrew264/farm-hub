@@ -3,11 +3,11 @@ import base64
 import json
 import os
 
+import requests
 import websockets
 from flask import Flask
 from flask import render_template, redirect
 from flask_socketio import SocketIO
-import requests
 
 from fs_utils import DEFAULT_SYSTEM_PROMPT, get_tokens, WS_EOS
 from typin import Dialog

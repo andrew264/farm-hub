@@ -8,11 +8,12 @@
     <link href="{{ url_for('static', filename='css/styles.css') }}" rel="stylesheet">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.7.2/socket.io.min.js"
             crossorigin="anonymous"></script>
-
+    <link rel="stylesheet"
+          href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0"/>
 </head>
 <body>
 <div class="container">
-    <header class="headd">
+    <header class="header-bar">
         Farm-HUB
     </header>
     <div id="chat-container">
@@ -51,14 +52,14 @@
                     </select>
                 </label>
 
-                <a class="resett" style="align-items: center;" href="/clear">
-                    <img src="../static/assets/Reset.png" width="25px" alt="Reset">
+                <a class="reset-button" style="align-items: center;" href="/clear">
+                    <span class="material-symbols-outlined">restart_alt</span>
                 </a>
-                <i class="fa fa-microphone mic" style="font-size:24px" onclick="startSpeechRecognition()"></i>
-
-                <div class="button" id="submitButton">
+                <!--                <i class="fa fa-microphone mic" style="font-size:24px" ></i>-->
+                <span class="material-symbols-outlined" onclick="startSpeechRecognition()">keyboard_voice</span>
+                <div id="submitButton">
+                    <span class="material-symbols-outlined">send</span>
                     <button class="btn">
-                        <input type="submit" class="text" value="Send"/>
                     </button>
                 </div>
             </div>

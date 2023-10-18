@@ -21,7 +21,7 @@ async def handle_client(websocket):
             # Send the input to the model and get the output
             for token in llm(client_input, stream=True,
                              top_p=0.9, temperature=1.2, batch_size=1,
-                             max_new_tokens=512, ):
+                             max_new_tokens=756, ):
                 generated += token
                 await websocket.send(token)
                 if '</s>' in generated:
