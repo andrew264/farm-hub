@@ -10,7 +10,7 @@ from types_and_constants import WS_EOS
 llm = None
 
 
-async def handle_client(websocket):
+async def handle_client(websocket: websockets.WebSocketServerProtocol, path: str = None):
     try:
         while True:
             # Receive a string input from the client
@@ -21,19 +21,20 @@ async def handle_client(websocket):
             # Send the input to the model and get the output
             for token in llm(client_input, stream=True,
                              top_p=0.9, temperature=1.2, batch_size=1,
-                             max_new_tokens=756, ):
+                             max_new_tokens=756, stop=['</s>']):
                 generated += token
                 await websocket.send(token)
-                if '</s>' in generated:
-                    break
 
             # send eos
+            pong_waiter = await websocket.ping()
+            latency = await pong_waiter
+            print(f"Latency: {latency * 1000:.4f}ms")
             await websocket.send(WS_EOS)
 
     except websockets.ConnectionClosedError:
-        print("Client disconnected")
+        print("Client disconnected with error")
     except websockets.ConnectionClosedOK:
-        print("Client disconnected")
+        print("Client disconnected OK")
 
 
 async def start_server(host: str, port: int):
@@ -44,7 +45,7 @@ async def start_server(host: str, port: int):
     print("Press Ctrl+C to stop the server")
     print(f"Server Listening on {host}:{port}")
 
-    async with websockets.serve(handle_client, host, port):
+    async with websockets.serve(handle_client, host, port, ping_interval=None):
         await stop
 
 

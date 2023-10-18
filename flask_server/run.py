@@ -36,15 +36,13 @@ print(f'IMAGE_SERVER_URI: {IMAGE_SERVER_URI}')
 
 
 async def do_llm_inference() -> str:
-    async with websockets.connect(LLM_SERVER_URI) as websocket:
+    async with websockets.connect(LLM_SERVER_URI, ping_interval=None) as websocket:
         await websocket.send(get_tokens(LLM_CONVERSATION))
 
         full_response = ''
         while True:
             response = await websocket.recv()
             if response == WS_EOS:
-                break
-            elif '</s>' in response:
                 break
             else:
                 # print(response, end='')

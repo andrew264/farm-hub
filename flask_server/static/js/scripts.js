@@ -38,11 +38,16 @@ submitButton.addEventListener('click', async (e) => {
             image.value = '';
         }
     }
+    if (userInput.value === '' && imageSrc === null) {
+        return;
+    }
     const userMessage = userInput.value;
     userInput.value = '';
     submitToSocket(userMessage, imageSrc);
 
-    appendMessage(userMessage);
+    if (userMessage !== '') {
+        appendMessage(userMessage);
+    }
     await fetchBotMessage();
 });
 
