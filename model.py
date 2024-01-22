@@ -1,29 +1,18 @@
-import tensorflow as tf
+from torch import nn
+from torchvision.models import convnext_small, ConvNeXt_Small_Weights
 
 
-class CNeXt(tf.keras.Model):
+class CNeXt(nn.Module):
     def __init__(self, num_classes: int):
         super(CNeXt, self).__init__()
         self.num_classes = num_classes
-        self.model_head = tf.keras.applications.ConvNeXtBase(
-            include_top=False
-        )
-        self.avg_pool = tf.keras.layers.GlobalAveragePooling2D()
-        self.final_layer = tf.keras.layers.Dense(self.num_classes, activation='softmax')
-        intermediate_size = (num_classes + 511) // 512 * 512
-        self.intermediate_layer_2 = tf.keras.layers.Dense(intermediate_size, activation='relu')
-        self.intermediate_layer_1 = tf.keras.layers.Dense(intermediate_size * 2, activation='relu')
+        self.model_head = convnext_small(weights=ConvNeXt_Small_Weights.DEFAULT)
+        for param in self.model_head.parameters():
+            param.requires_grad = False
+        self.model_head.classifier[2] = nn.Linear(768, num_classes)
 
-        # freeze model head
-        self.model_head.trainable = False
-
-    def call(self, inputs, training=None, mask=None):
-        x = self.model_head(inputs)
-        x = self.avg_pool(x)
-        x = self.intermediate_layer_1(x)
-        x = self.intermediate_layer_2(x)
-        x = self.final_layer(x)
-        return x
+    def forward(self, inputs):
+        return self.model_head(inputs)
 
     def get_config(self):
         config = super(CNeXt, self).get_config()

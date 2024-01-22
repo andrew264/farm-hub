@@ -1,5 +1,5 @@
-tensorflow
-keras
+torchvision
+torch
 jupyter
 notebook
 numpy

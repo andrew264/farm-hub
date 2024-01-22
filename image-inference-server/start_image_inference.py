@@ -7,17 +7,22 @@ import signal
 import socketserver
 import sys
 
-import numpy as np
 import pandas as pd
+import torch
 from PIL import Image
+from torchvision import transforms
 
 from _types import ImageResult
 
-os.environ['TF_CPP_MIN_LOG_LEVEL'] = '3'
-os.environ['CUDA_VISIBLE_DEVICES'] = '-1'
-
 image_classifier = None
 plants_dataframe = pd.read_csv("datasets/FARM_HUB.csv")
+model_path = "models/convnext_small.pth"
+transform = transforms.Compose([
+    transforms.Resize(256),
+    transforms.CenterCrop(224),
+    transforms.ToTensor(),
+    transforms.Normalize(mean=[0.485, 0.456, 0.406], std=[0.229, 0.224, 0.225])
+])
 
 
 def do_image_inference(image_base64: str) -> ImageResult:
@@ -25,8 +30,11 @@ def do_image_inference(image_base64: str) -> ImageResult:
     image = Image.open(io.BytesIO(image_bytes))
     if image.mode != 'RGB':
         image = image.convert('RGB')
-    image = image.resize((256, 256))
-    out = np.argmax(image_classifier.predict(np.array([image]), verbose=0), axis=1)[0]
+    image_tensor = transform(image).unsqueeze(0)
+    with torch.no_grad():
+        out = image_classifier(image_tensor)
+        _, predicted = torch.max(out.data, 1)
+    out = predicted.item()
     row = plants_dataframe.iloc[out]
     class_name = row["CLASS"]
     plant_name = row["PLANT_NAME"]
@@ -61,6 +69,7 @@ class ImageInferenceRequestHandler(http.server.BaseHTTPRequestHandler):
 
 
 if __name__ == "__main__":
+    device = torch.device("cpu")
     with open('config.json') as f:
         config = json.load(f)
     host = config['image-server']['host']
@@ -76,20 +85,17 @@ if __name__ == "__main__":
 
 
     print('Loading Image Classifier...')
-    import tensorflow as tf
     from model import CNeXt
 
     with open("models/num_classes.txt", "r") as f:
         num_classes = int(f.read())
-
-    with tf.device('/cpu:0'):
         image_classifier = CNeXt(num_classes=num_classes)
-        image_classifier.build((1, 256, 256, 3))
-        if os.path.exists('models/CNeXt.h5'):
-            image_classifier.load_weights('models/CNeXt.h5')
+        image_classifier.to(device=device)
+        if os.path.exists(model_path):
+            image_classifier.load_state_dict(torch.load(model_path, map_location=device))
         else:
             raise FileNotFoundError('Model weights not found.')
-        image_classifier.predict(np.zeros((1, 256, 256, 3)))
+        image_classifier.eval()
 
     # Start the server
     print("Press Ctrl+C to stop the server")
