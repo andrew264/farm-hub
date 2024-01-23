@@ -4,7 +4,7 @@ jupyter
 notebook
 numpy
 matplotlib
-ctransformers[cuda]
+vllm
 Pillow
 flask[async]
 requests
