@@ -13,7 +13,7 @@ from fs_utils import DEFAULT_SYSTEM_PROMPT, get_tokens, WS_EOS
 from typin import Dialog
 
 app = Flask(__name__)
-socketio = SocketIO(app, async_mode='threading')
+socketio = SocketIO(app)
 
 LLM_CONVERSATION: Dialog = [
     {"role": "system", "content": DEFAULT_SYSTEM_PROMPT, },
@@ -28,11 +28,11 @@ else:
 LLM_SERVER_HOST = config['llm-server']['host']
 LLM_SERVER_PORT = config['llm-server']['port']
 LLM_SERVER_URI = f'ws://{LLM_SERVER_HOST}:{LLM_SERVER_PORT}'
-print(f'LLM_SERVER_URI: {LLM_SERVER_URI}')
+# print(f'LLM_SERVER_URI: {LLM_SERVER_URI}')
 IMAGE_SERVER_HOST = config['image-server']['host']
 IMAGE_SERVER_PORT = config['image-server']['port']
 IMAGE_SERVER_URI = f'http://{IMAGE_SERVER_HOST}:{IMAGE_SERVER_PORT}'
-print(f'IMAGE_SERVER_URI: {IMAGE_SERVER_URI}')
+# print(f'IMAGE_SERVER_URI: {IMAGE_SERVER_URI}')
 
 
 async def do_llm_inference() -> str:
@@ -45,12 +45,10 @@ async def do_llm_inference() -> str:
             if response == WS_EOS:
                 break
             else:
-                # print(response, end='')
                 socketio.emit('content', response)
                 full_response += response
         socketio.emit('content', WS_EOS)
 
-    full_response = full_response.replace('</s>', '')
     return full_response
 
 
@@ -81,18 +79,17 @@ def clear():
 
 @socketio.on('connect')
 def handle_connect():
-    print("Client connected ")
+    print("client socket connected")
 
 
 @socketio.on('disconnect')
 def handle_disconnect():
-    print("Client disconnected ")
+    print("client socket disconnected")
 
 
 @socketio.on('submit')
 def handle_submit(data):
     message = data.get('message', '')
-    lang = data.get('lang', 'en')
     image = data.get('image', None)
 
     if image:

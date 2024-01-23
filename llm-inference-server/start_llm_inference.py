@@ -19,12 +19,11 @@ async def handle_client(websocket: websockets.WebSocketServerProtocol, path: str
             client_input = await websocket.recv()
             print("Processing input...")
 
-            generated = ''
+            last_index = 0
             # Send the input to the model and get the output
             async for output in engine.generate(client_input, sampling_params, request_id="INFERENCE-SERVER"):
-                new_generated = output.outputs[0].text.replace(generated, "")
-                await websocket.send(new_generated)
-                generated = output.outputs[0].text
+                await websocket.send(output.outputs[0].text[last_index:])
+                last_index = len(output.outputs[0].text)
             await websocket.send(WS_EOS)
 
             # send eos
