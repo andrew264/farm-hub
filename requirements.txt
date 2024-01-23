@@ -9,10 +9,6 @@ Pillow
 flask[async]
 requests
 pandas
-translate
-langdetect
-gunicorn
-youtube-search-python
 websockets
 flask-socketio
 simple-websocket
