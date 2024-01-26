@@ -1,13 +1,13 @@
 import asyncio
 import json
+import os
 import signal
 
 import websockets
 
 from types_and_constants import WS_EOS
 
-CONTENT = """
-We're no strangers to love
+CONTENT = """We're no strangers to love
 You know the rules and so do I (do I)
 A full commitment's what I'm thinking of
 You wouldn't get this from any other guy
@@ -86,8 +86,11 @@ async def handle_client(websocket: websockets.WebSocketServerProtocol, path: str
 async def start_server(host: str, port: int):
     loop = asyncio.get_event_loop()
     stop = loop.create_future()
-    #loop.add_signal_handler(signal.SIGTERM, stop.set_result, None)
-    #loop.add_signal_handler(signal.SIGINT, stop.set_result, None)
+    if os.name == 'posix':
+        loop.add_signal_handler(signal.SIGTERM, stop.set_result, None)
+        loop.add_signal_handler(signal.SIGINT, stop.set_result, None)
+    else:
+        print("WARNING: Cannot add signal handlers on non-Linux OS")
     print("Press Ctrl+C to stop the server")
     print(f"Server Listening on {host}:{port}")
 

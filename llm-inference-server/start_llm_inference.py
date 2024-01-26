@@ -1,5 +1,6 @@
 import asyncio
 import json
+import os
 import signal
 
 import websockets
@@ -41,8 +42,11 @@ async def handle_client(websocket: websockets.WebSocketServerProtocol, path: str
 async def start_server(host: str, port: int):
     loop = asyncio.get_event_loop()
     stop = loop.create_future()
-    loop.add_signal_handler(signal.SIGTERM, stop.set_result, None)
-    loop.add_signal_handler(signal.SIGINT, stop.set_result, None)
+    if os.name == 'posix':
+        loop.add_signal_handler(signal.SIGTERM, stop.set_result, None)
+        loop.add_signal_handler(signal.SIGINT, stop.set_result, None)
+    else:
+        print("WARNING: Cannot add signal handlers on non-Linux OS")
     print("Press Ctrl+C to stop the server")
     print(f"Server Listening on {host}:{port}")
 

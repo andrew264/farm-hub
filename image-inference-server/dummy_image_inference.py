@@ -1,5 +1,6 @@
 import http.server
 import json
+import os
 import random
 import signal
 import socketserver
@@ -56,6 +57,7 @@ if __name__ == "__main__":
         config = json.load(f)
     host = config['image-server']['host']
     port = config['image-server']['port']
+    print("Starting server...")
     server = socketserver.TCPServer((host, port), ImageInferenceRequestHandler)
 
 
@@ -67,7 +69,10 @@ if __name__ == "__main__":
 
     # Start the server
     print("Press Ctrl+C to stop the server")
-    signal.signal(signal.SIGTERM, signal_handler)
-    signal.signal(signal.SIGINT, signal_handler)
+    if os.name == 'posix':
+        signal.signal(signal.SIGTERM, signal_handler)
+        signal.signal(signal.SIGINT, signal_handler)
+    else:
+        print("WARNING: Cannot add signal handlers on non-Linux OS")
     print(f"Server listening on http://{host}:{port}")
     server.serve_forever()
