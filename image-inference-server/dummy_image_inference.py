@@ -8,7 +8,7 @@ import sys
 
 import pandas as pd
 
-from _types import ImageResult
+from typin import ImageResult
 
 image_classifier = None
 plants_dataframe = pd.read_csv("datasets/FARM_HUB.csv")
@@ -38,8 +38,7 @@ class ImageInferenceRequestHandler(http.server.BaseHTTPRequestHandler):
             self.end_headers()
             if image_base64 is not None:
                 image_result = do_image_inference(image_base64)
-                response = {'result': str(image_result)}
-                self.wfile.write(json.dumps(response).encode('utf-8'))
+                self.wfile.write(image_result.to_json().encode('utf-8'))
             else:
                 print("No image found")
                 error_message = {"error": "Image not found"}
@@ -66,6 +65,7 @@ if __name__ == "__main__":
         print("Shutting down the server")
         server.socket.close()
         sys.exit(0)
+
 
     # Start the server
     print("Press Ctrl+C to stop the server")

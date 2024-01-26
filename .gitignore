@@ -2,6 +2,4 @@
 datasets/
 *.pyc
 models/
-Bloke/
-flask_server/temp-files/
 KOODA/

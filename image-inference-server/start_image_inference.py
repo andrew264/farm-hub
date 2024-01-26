@@ -12,7 +12,7 @@ import torch
 from PIL import Image
 from torchvision import transforms
 
-from _types import ImageResult
+from typin import ImageResult
 
 image_classifier = None
 plants_dataframe = pd.read_csv("datasets/FARM_HUB.csv")
@@ -55,8 +55,7 @@ class ImageInferenceRequestHandler(http.server.BaseHTTPRequestHandler):
             self.end_headers()
             if image_base64 is not None:
                 image_result = do_image_inference(image_base64)
-                response = {'result': str(image_result)}
-                self.wfile.write(json.dumps(response).encode('utf-8'))
+                self.wfile.write(image_result.to_json().encode('utf-8'))
             else:
                 error_message = {"error": "Image not found"}
                 self.wfile.write(json.dumps(error_message).encode('utf-8'))

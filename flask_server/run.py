@@ -1,5 +1,4 @@
 import asyncio
-import base64
 import json
 import os
 
@@ -9,7 +8,7 @@ from flask import Flask
 from flask import render_template, redirect
 from flask_socketio import SocketIO
 
-from typin import Dialog, WS_EOS
+from typin import Dialog, WS_EOS, ImageResult
 
 app = Flask(__name__)
 socketio = SocketIO(app)
@@ -47,16 +46,12 @@ async def do_llm_inference() -> str:
     return full_response
 
 
-def do_image_inference(image_bytes) -> str:
-    image_base64 = base64.b64encode(image_bytes).decode('utf-8')
+def do_image_inference(image_b64) -> ImageResult:
+    image_b64 = image_b64.split(',')[1]
     with requests.Session() as session:
-        with session.post(IMAGE_SERVER_URI, json={'image': image_base64}) as resp:
-            result = resp.json()
-            if 'result' in result:
-                return result['result']
-            else:
-                print(result)
-                return 'Error'
+        with session.post(IMAGE_SERVER_URI, json={'image': image_b64}) as resp:
+            result = ImageResult.from_json(resp.json())
+            return result
 
 
 @app.route('/')
@@ -87,9 +82,9 @@ def handle_submit(data):
     image = data.get('image', None)
     content = message
     if image:
-        image_bytes = base64.b64decode(image.split(',')[1])
-        image_result = do_image_inference(image_bytes)
-        content = f'Image: {image_result}\n{message}'
+        image_result = do_image_inference(image)
+        if image_result:
+            content = f'Image: {image_result}\n{message}'
     LLM_CONVERSATION.add_user_message(content)
 
     resp = asyncio.new_event_loop().run_until_complete(do_llm_inference())
