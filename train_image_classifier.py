@@ -1,22 +1,25 @@
-import torch
+import time
 
+import torch
 from torch import optim, nn
-from torchvision.transforms import transforms
-from torch.utils.data import DataLoader, Dataset
+from torch.utils.data import DataLoader
 from torchvision.datasets import ImageFolder
+from torchvision.transforms import transforms
 
 from model import CNeXt
 
 train_data = './datasets/images/train'
 val_data = './datasets/images/valid'
-batch_size = 256
+batch_size = 512
 device = torch.device("cuda")
 
 
-def train_model(classifier: nn.Module, train_loader, val_loader, num_epochs):
+def train_model(classifier: nn.Module, train_loader: DataLoader, val_loader: DataLoader, num_epochs=1):
     criterion = torch.nn.CrossEntropyLoss()
     optimizer = optim.Adam(classifier.parameters(), lr=0.001, fused=True)
     for epoch in range(num_epochs):
+        losses = []
+        time_start = time.time()
         for i, (images, labels) in enumerate(train_loader):
             images = images.to(device)
             labels = labels.to(device)
@@ -24,12 +27,18 @@ def train_model(classifier: nn.Module, train_loader, val_loader, num_epochs):
             optimizer.zero_grad()
             outputs = classifier(images)
             loss = criterion(outputs, labels)
+            losses.append(loss.item())
             loss.backward()
             optimizer.step()
 
-            if i % 100 == 0:
+            if i > 1 and i % 100 == 0:
+                loss_val = sum(losses) / len(losses)
                 print('Epoch [{}/{}], Step [{}/{}], Loss: {:.4f}'.format(epoch + 1, num_epochs, i + 1,
-                                                                         len(train_loader), loss.item()))
+                                                                         len(train_loader), loss_val))
+        loss_val = sum(losses) / len(losses)
+        print('Epoch [{}/{}], Step [{}/{}], Loss: {:.4f}'.format(epoch + 1, num_epochs, i + 1,
+                                                                 len(train_loader), loss_val))
+        print(f"Epoch {epoch + 1} took {time.time() - time_start} seconds")
 
         # Evaluate on validation set
         with torch.no_grad():
@@ -78,5 +87,4 @@ if __name__ == '__main__':
 
     model = CNeXt(num_classes=num_classes)
     model.to(dtype=torch.float32, device=device)
-    train_model(model, train_loader=train_dataset, val_loader=val_dataset, num_epochs=1)
-
+    train_model(model, train_loader=train_dataset, val_loader=val_dataset, num_epochs=3)
