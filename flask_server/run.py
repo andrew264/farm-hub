@@ -9,15 +9,12 @@ from flask import Flask
 from flask import render_template, redirect
 from flask_socketio import SocketIO
 
-from fs_utils import DEFAULT_SYSTEM_PROMPT, get_tokens, WS_EOS
-from typin import Dialog
+from typin import Dialog, WS_EOS
 
 app = Flask(__name__)
 socketio = SocketIO(app)
 
-LLM_CONVERSATION: Dialog = [
-    {"role": "system", "content": DEFAULT_SYSTEM_PROMPT, },
-]
+LLM_CONVERSATION: Dialog = Dialog()
 
 if os.path.exists('config.json'):
     with open('config.json', 'r') as f:
@@ -28,16 +25,14 @@ else:
 LLM_SERVER_HOST = config['llm-server']['host']
 LLM_SERVER_PORT = config['llm-server']['port']
 LLM_SERVER_URI = f'ws://{LLM_SERVER_HOST}:{LLM_SERVER_PORT}'
-# print(f'LLM_SERVER_URI: {LLM_SERVER_URI}')
 IMAGE_SERVER_HOST = config['image-server']['host']
 IMAGE_SERVER_PORT = config['image-server']['port']
 IMAGE_SERVER_URI = f'http://{IMAGE_SERVER_HOST}:{IMAGE_SERVER_PORT}'
-# print(f'IMAGE_SERVER_URI: {IMAGE_SERVER_URI}')
 
 
 async def do_llm_inference() -> str:
     async with websockets.connect(LLM_SERVER_URI, ping_interval=None) as websocket:
-        await websocket.send(get_tokens(LLM_CONVERSATION))
+        await websocket.send(LLM_CONVERSATION.get_tokens())
 
         full_response = ''
         while True:
@@ -66,14 +61,13 @@ def do_image_inference(image_bytes) -> str:
 
 @app.route('/')
 def index():
+    LLM_CONVERSATION.reset()
     return render_template('index.html')
 
 
 @app.route('/clear')
 def clear():
-    default = LLM_CONVERSATION[0]
-    LLM_CONVERSATION.clear()
-    LLM_CONVERSATION.append(default)
+    LLM_CONVERSATION.reset()
     return redirect('/')
 
 
@@ -91,16 +85,15 @@ def handle_disconnect():
 def handle_submit(data):
     message = data.get('message', '')
     image = data.get('image', None)
-
+    content = message
     if image:
         image_bytes = base64.b64decode(image.split(',')[1])
         image_result = do_image_inference(image_bytes)
-        LLM_CONVERSATION.append({"role": "user", "content": f'Image: {image_result}\n{message}'})
-    else:
-        LLM_CONVERSATION.append({"role": "user", "content": message})
+        content = f'Image: {image_result}\n{message}'
+    LLM_CONVERSATION.add_user_message(content)
 
     resp = asyncio.new_event_loop().run_until_complete(do_llm_inference())
-    LLM_CONVERSATION.append({"role": "assistant", "content": resp})
+    LLM_CONVERSATION.add_assistant_message(resp)
 
 
 if __name__ == '__main__':
