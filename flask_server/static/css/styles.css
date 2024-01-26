@@ -16,15 +16,17 @@
     display: flex;
     flex-direction: column;
     height: 100%;
+    width: 100vw;
 }
 
+
 .header-bar {
-    background-color: black;
+    width: 100vw;
     color: white;
     text-align: center;
     font-family: 'Poppins', sans-serif;
     text-transform: uppercase;
-    padding: 10px 20px;
+    padding: 10px 10vw;
     font-size: 40px;
     display: flex;
     justify-content: space-between;
@@ -33,20 +35,22 @@
 body, html {
     margin: 0;
     padding: 0;
-    height: 100%
+    height: 100%;
 }
 
 body {
     background-size: cover;
     background-blend-mode: lighten;
-    background-color: black;
+    background: rgb(101,94,231);
+    background: radial-gradient(circle, rgba(101,94,231,1) 0%, rgba(133,173,213,1) 0%, rgba(45,119,138,1) 100%);
     color: black;
     font-family: 'Poppins', sans-serif;
+    width: 100vw;
 }
 
 #chat-container {
-    background-color: rgba(0, 0, 0, 0.5);
-    box-shadow: inset 0 0 5px #9ae761;
+    background-color: rgba(0, 0, 0, 0.);
+    /*box-shadow: inset 0 0 5px #9ae761;*/
     margin-bottom: 110px;
     flex-grow: 1; /* This allows the content to take up remaining space */
     overflow-y: auto; /* Enables vertical scrolling for content */
@@ -72,9 +76,7 @@ li {
     box-shadow: .4em .4em black;
 }
 
-#inputs {
-    vertical-align: text-top;
-}
+
 
 .user {
     padding-left: 5px;
@@ -82,51 +84,42 @@ li {
     box-shadow: .4em .4em black;
 }
 
-form {
-    position: absolute;
-    bottom: 15px;
-    background-color: #fff;
-    box-shadow: 0 3px 5px rgb(218, 229, 255);
-    border: 1px solid rgb(159, 159, 160);
-    border-radius: 20px;
-    padding: 1rem .7rem 0 .7rem;
-    font-size: 1.125rem;
-    width: 90vw;
-    color: black;
-    margin: 0;
-}
 
 .formContainer {
+    transform: translateX(50%);
     bottom: 0;
     display: flex;
-    justify-content: center;
+    justify-content: space-between;
+    width: 50vw;
+    background-color: #1C1A1C;
+    margin-bottom: 1.5vh;
 }
 
-#message {
-    padding: 10px 20px;
-    border-radius: 10px;
-    width: 82vw;
-    height: 3.2vh;
+#file-input-label {
+    font-size: 1.3em;
+    padding: 0px 5px;
+    border: 1px solid black;
+    border-radius: 4%;
+    color: white;
 }
 
-#inputs {
-    justify-content: space-around;
-    padding-bottom: 25px;
+#image-add-button {
+    display: none;
+}
+
+.imgContainer{
     display: flex;
+    padding-left: 2vw;
+}
 
+#img{
+    display: none;
 }
 
 .text {
     font-weight: 600;
     color: #AAAAAA;
     font-size: medium;
-}
-
-.input {
-    position: absolute;
-    opacity: 100;
-    width: 100%;
-    height: 100%;
 }
 
 .reset-button:hover {
@@ -141,22 +134,6 @@ form {
     color: white;
 }
 
-.input-container {
-    position: relative;
-    display: inline-block;
-}
-
-#submitButton {
-    position: absolute;
-    top: 50%;
-    right: 2px;
-    transform: translateY(-50%);
-}
-.image-label {
-    position: absolute;
-    left: 2px;
-    top: 25%;
-}
-#image {
-    display: block;
+#submitButton{
+    margin-right: 2vw;
 }

@@ -31,6 +31,18 @@ submitButton.addEventListener('click', async (e) => {
     await fetchBotMessage();
 });
 
+function readURL(input) {
+    if (input.files && input.files[0]) {  
+      var reader = new FileReader();
+      reader.onload = function (e) { 
+        document.querySelector("#img").setAttribute("src",e.target.result);
+        document.querySelector("#img").style.display = "block";
+    };
+
+      reader.readAsDataURL(input.files[0]); 
+    }
+  }
+
 function submitToSocket(message, image) {
     socket.emit('submit', {'message': message, 'image': image});
     console.log('submitted');
