@@ -1,15 +1,17 @@
 import asyncio
 import json
 import os
+import sys
+from typing import Optional
 
+import path
+import pytube
 import requests
 import websockets
 from flask import Flask
 from flask import render_template, redirect
 from flask_socketio import SocketIO
 
-import sys
-import path
 sys.path.append(path.Path(__file__).abspath().parent.parent)
 
 from typin import Dialog, WS_EOS, ImageResult
@@ -48,6 +50,14 @@ async def do_llm_inference(conversation: Dialog) -> str:
         socketio.emit('content', WS_EOS)
 
     return full_response
+
+
+def get_video_link(context: str) -> Optional[str]:
+    res = pytube.contrib.search.Search(context)
+    if res.results:
+        return 'https://www.youtube.com/embed/' + res.results[0].video_id
+    else:
+        return None
 
 
 def do_image_inference(image_b64) -> ImageResult:
@@ -91,8 +101,10 @@ def handle_submit(data):
     message = data.get('message', '')
     image = data.get('image', None)
     content = message
+    conversation.context = message
     if image:
         image_result = do_image_inference(image)
+        conversation.image_class = image_result.class_name
         if image_result:
             content = f'Image: {image_result}\n{message}'
     conversation.add_user_message(content)

@@ -2,6 +2,14 @@ import json
 from enum import Enum
 from typing import Optional, Self, TypedDict, List
 
+from nltk.corpus import stopwords
+from nltk.tokenize import word_tokenize
+
+# import nltk
+# nltk.download('stopwords')
+# nltk.download('punkt')
+stop_words = set(stopwords.words('english'))
+
 
 class ImageResult:
     def __init__(self, class_name: str, plant_name: str, disease_name: Optional[str], description: Optional[str]):
@@ -63,6 +71,18 @@ class Dialog:
         self.messages: List[Message] = []
         system_message = {"role": Role.SYSTEM, "content": DEFAULT_SYSTEM_PROMPT, }
         self.messages.append(system_message)
+        self._context = ""
+        self.image_class: str = ""
+
+    @property
+    def context(self) -> str:
+        return self.image_class + " " + self._context
+
+    @context.setter
+    def context(self, context: str):
+        tokenized_text = word_tokenize(context)
+        filtered_text = [w for w in tokenized_text if w not in stop_words]
+        self._context = ' '.join(filtered_text)
 
     @property
     def system_message(self) -> Optional[Message]:

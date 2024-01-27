@@ -13,3 +13,5 @@ websockets
 flask-socketio
 simple-websocket
 path
+nltk
+pytube
