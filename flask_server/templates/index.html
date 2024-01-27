@@ -20,7 +20,7 @@
 <div class="container">
     <header class="header-bar">
         <p id="usrName"></p>
-        <h1 class="font-[fort]" >FarmHub</h1>
+        <h1 class="font-[fort]">FarmHub</h1>
         <a class="reset-button" href="/clear">
             <span class="material-symbols-outlined">delete</span>
         </a>
@@ -30,7 +30,8 @@
     </div>
     <div class="formContainer">
         <div class="imgContainer">
-            <input oninput="adjustHeight(this)" onchange="readURL(this)" accept="image/*" id="image-add-button" title="none" type="file">
+            <input oninput="adjustHeight(this)" onchange="readURL(this)" accept="image/*" id="image-add-button"
+                   title="none" type="file">
             <label id="file-input-label" for="image-add-button">
                 <span class="material-symbols-outlined">
                     add_photo_alternate
@@ -39,13 +40,13 @@
             <img id="img" src="" alt="" width="75px" height="75px">
         </div>
         <div id="optCont">
-            <select name="language" id="opts">
-                <option value="en" selected>English</option>
-                <option value="ta">Tamil</option>
-                <option value="hi">Hindi</option>
-                <option value="fr">French</option>
-                <option value="es">Spanish</option>
-                <option value="ja">Japanese</option>
+            <select name="language" id="language-select">
+                <option value="English" selected>English</option>
+                <option value="Tamil">Tamil</option>
+                <option value="Hindi">Hindi</option>
+                <option value="French">French</option>
+                <option value="Spanish">Spanish</option>
+                <option value="Japanese">Japanese</option>
             </select>
         </div>
         <div>
@@ -65,7 +66,7 @@
             </button>
         </div>
     </div>
-    <lottie-player class="lot" src="{{url_for('static', filename = 'assets/chat.json')}}" loop autoplay />
+    <lottie-player class="lot" src="{{url_for('static', filename = 'assets/chat.json')}}" loop autoplay/>
 </div>
 <script src="{{ url_for('static', filename='js/scripts.js') }}"></script>
 </body>

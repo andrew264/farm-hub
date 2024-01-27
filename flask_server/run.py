@@ -40,8 +40,7 @@ IMAGE_SERVER_HOST = config['image-server']['host']
 IMAGE_SERVER_PORT = config['image-server']['port']
 IMAGE_SERVER_URI = f'http://{IMAGE_SERVER_HOST}:{IMAGE_SERVER_PORT}'
 
-
-EMBED_TEMPLATE = """<iframe width='560' height='315' src='https://www.youtube.com/embed/{video_id}' referrerpolicy='no-referrer-when-downgrade'</iframe>"""
+EMBED_TEMPLATE = "<a href='{url}' target='_blank'>{title}</a>"
 
 
 async def do_llm_inference(conversation: Dialog) -> str:
@@ -77,11 +76,11 @@ def get_video_embed() -> str:
     conversation = LLM_CONVERSATION.get(username, None)
     if conversation is None:
         return ""
-    context = conversation.context + " " + conversation.image_class
+    context = conversation.context
     res = pytube.contrib.search.Search(context)
     if res.results:
-        video_id = res.results[0].video_id
-        return EMBED_TEMPLATE.format(video_id=video_id)
+        video = res.results[0]
+        return EMBED_TEMPLATE.format(title=video.title, url=video.watch_url)
     else:
         return ""
 
@@ -170,9 +169,10 @@ def handle_submit(data):
         return redirect('/login')
     message = data.get('message', '')
     image = data.get('image', None)
-    opts = data.get('opts', 'English')
+    language = data.get('language', 'English')
     content = message
     conversation.context = message
+    conversation.user_language = language
     if image:
         image_result = do_image_inference(image)
         conversation.image_class = image_result.class_name

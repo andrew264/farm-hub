@@ -73,10 +73,14 @@ class Dialog:
         self.messages.append(system_message)
         self._context = ""
         self.image_class: str = ""
+        self.user_language: str = ""
 
     @property
     def context(self) -> str:
-        return self.image_class + " " + self._context
+        out = self.image_class.replace('_', ' ').lower() + " " + self._context
+        if self.user_language != "":
+            out += " in " + self.user_language
+        return out
 
     @context.setter
     def context(self, context: str):

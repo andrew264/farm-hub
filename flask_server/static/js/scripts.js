@@ -3,14 +3,13 @@ const chatContainer = document.getElementById('chat-container');
 const submitButton = document.getElementById('submitButton');
 const userInput = document.getElementById('message');
 const image = document.getElementById('image-add-button');
+const langSelect = document.getElementById('language-select');
 const socket = io();
 
 submitButton.addEventListener('click', async (e) => {
     e.preventDefault();
     let imageSrc = null;
 
-    const language = document.getElementById('opts').value;
-    console.log(language);
     const imageFile = image.files[0];
     if (imageFile) {
         imageSrc = await loadImage(imageFile);
@@ -25,7 +24,7 @@ submitButton.addEventListener('click', async (e) => {
     }
     const userMessage = userInput.value;
     userInput.value = '';
-    submitToSocket(userMessage, imageSrc);
+    submitToSocket(userMessage, imageSrc, langSelect.value);
 
     if (userMessage !== '') {
         appendMessage(userMessage);
@@ -45,9 +44,8 @@ function readURL(input) {
     }
 }
 
-function submitToSocket(message, image) {
-    socket.emit('submit', {'message': message, 'image': image});
-    console.log('submitted');
+function submitToSocket(message, image, language) {
+    socket.emit('submit', {'message': message, 'image': image, 'language': language});
 }
 
 function loadImage(imageFile) {
@@ -94,10 +92,11 @@ function fetchBotMessage() {
     const botElement = createBotMessage();
 
     return new Promise((resolve) => {
-        socket.on('content', function (data) {
+        socket.on('content', async function (data) {
             if (data === '//EOS//') {
                 resolve();
                 socket.off('content');
+                await fetchVideo();
                 return;
             }
             botElement.innerText += data;
@@ -110,8 +109,7 @@ function fetchBotMessage() {
 async function fetchVideo() {
     const botElement = createBotMessage();
     const response = await fetch('/get_video_embed');
-    const data = await response.text();
-    botElement.innerHTML = data;
+    botElement.innerHTML = await response.text();
     scrollToBottom();
 }
 
@@ -119,7 +117,7 @@ async function fetchVideo() {
 function scrollToBottom() {
     chatContainer.scrollTop = chatContainer.scrollHeight;
 }
-  
+
 async function getUserName() {
     const response = await fetch('/get_username');
     const data = await response.json();
@@ -136,7 +134,7 @@ function adjustHeight(textarea) {
 async function renderUsername() {
     const username = await getUserName();
     let doc = document.getElementById('usrName');
-    doc.innerHTML = 'hello ,' + username;
+    doc.innerHTML = 'Hello, ' + username + '!';
     doc.style.fontSize = 'small';
     doc.style.display = 'flex';
     doc.style.alignItems = 'center';

@@ -81,7 +81,7 @@ li {
 }
 
 /*Show no box Shadow for img in chatcontainer*/
-#chat-container img{
+#chat-container img {
     box-shadow: none;
 }
 
@@ -94,6 +94,9 @@ li {
     box-shadow: .4em .4em black;
 }
 
+.bot a {
+    color: #1da1f2;
+}
 
 .user {
 
@@ -113,7 +116,7 @@ li {
     border-radius: 10px;
 }
 
-.formContainer div{
+.formContainer div {
     display: flex;
     align-items: center;
     padding-top: 10px;
@@ -170,7 +173,7 @@ li {
     align-items: center;
 }
 
-#message{
+#message {
     width: 50vw;
     height: 100%;
     border: none;
@@ -183,7 +186,7 @@ li {
     outline: none;
 }
 
-.lot{
+.lot {
     position: absolute;
     width: 50vw;
     left: -15vw;
@@ -192,14 +195,14 @@ li {
     bottom: 0;
 }
 
-#opts{
+#opts {
     width: 50px;
     height: 25px;
     transition: 0.5s ease-in-out;
 
 }
 
-#optCont{
+#optCont {
     transition: 0.5s ease-in-out;
     display: flex;
     justify-content: space-between;
