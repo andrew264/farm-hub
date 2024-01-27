@@ -146,7 +146,7 @@ def get_username():
 def clear():
     conversation = LLM_CONVERSATION.get('default')
     conversation.reset()
-    return redirect('/')
+    return redirect('/llm-chat')
 
 
 @socketio.on('connect')
