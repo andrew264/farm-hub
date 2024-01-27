@@ -1,6 +1,6 @@
 import json
 from enum import Enum
-from typing import Optional, Self, TypedDict
+from typing import Optional, Self, TypedDict, List
 
 
 class ImageResult:

@@ -8,6 +8,9 @@ import sys
 
 import pandas as pd
 
+import path
+sys.path.append(path.Path(__file__).abspath().parent.parent)
+
 from typin import ImageResult
 
 image_classifier = None
