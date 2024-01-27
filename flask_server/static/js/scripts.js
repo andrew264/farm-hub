@@ -107,6 +107,15 @@ function fetchBotMessage() {
     });
 }
 
+async function fetchVideo() {
+    const botElement = createBotMessage();
+    const response = await fetch('/get_video_embed');
+    const data = await response.text();
+    botElement.innerHTML = data;
+    scrollToBottom();
+}
+
+
 function scrollToBottom() {
     chatContainer.scrollTop = chatContainer.scrollHeight;
 }

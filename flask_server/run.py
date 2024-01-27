@@ -2,7 +2,6 @@ import asyncio
 import json
 import os
 import sys
-from typing import Optional
 
 import path
 import pytube
@@ -42,10 +41,7 @@ IMAGE_SERVER_PORT = config['image-server']['port']
 IMAGE_SERVER_URI = f'http://{IMAGE_SERVER_HOST}:{IMAGE_SERVER_PORT}'
 
 
-EMBED_TEMPLATE = """<iframe width="560" height="315" src="https://www.youtube.com/embed/{video_id}"
-title="YouTube video player" frameborder="0"
-allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-allowfullscreen></iframe> """
+EMBED_TEMPLATE = """<iframe width='560' height='315' src='https://www.youtube.com/embed/{video_id}' referrerpolicy='no-referrer-when-downgrade'</iframe>"""
 
 
 async def do_llm_inference(conversation: Dialog) -> str:
@@ -65,8 +61,16 @@ async def do_llm_inference(conversation: Dialog) -> str:
     return full_response
 
 
-@app.route('/get_video_link')
-def get_video_link() -> str:
+def do_image_inference(image_b64) -> ImageResult:
+    image_b64 = image_b64.split(',')[1]
+    with requests.Session() as session:
+        with session.post(IMAGE_SERVER_URI, json={'image': image_b64}) as resp:
+            result = ImageResult.from_json(resp.json())
+            return result
+
+
+@app.route('/get_video_embed')
+def get_video_embed() -> str:
     username = request.cookies.get('username', None)
     if username is None:
         return ""
@@ -80,14 +84,6 @@ def get_video_link() -> str:
         return EMBED_TEMPLATE.format(video_id=video_id)
     else:
         return ""
-
-
-def do_image_inference(image_b64) -> ImageResult:
-    image_b64 = image_b64.split(',')[1]
-    with requests.Session() as session:
-        with session.post(IMAGE_SERVER_URI, json={'image': image_b64}) as resp:
-            result = ImageResult.from_json(resp.json())
-            return result
 
 
 @app.route('/')
