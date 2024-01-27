@@ -8,12 +8,16 @@ from flask import Flask
 from flask import render_template, redirect
 from flask_socketio import SocketIO
 
+import sys
+import path
+sys.path.append(path.Path(__file__).abspath().parent.parent)
+
 from typin import Dialog, WS_EOS, ImageResult
 
 app = Flask(__name__)
 socketio = SocketIO(app)
 
-LLM_CONVERSATION: Dialog = Dialog()
+LLM_CONVERSATION: dict[str, Dialog] = {"default": Dialog()}
 
 if os.path.exists('config.json'):
     with open('config.json', 'r') as f:
@@ -29,9 +33,9 @@ IMAGE_SERVER_PORT = config['image-server']['port']
 IMAGE_SERVER_URI = f'http://{IMAGE_SERVER_HOST}:{IMAGE_SERVER_PORT}'
 
 
-async def do_llm_inference() -> str:
+async def do_llm_inference(conversation: Dialog) -> str:
     async with websockets.connect(LLM_SERVER_URI, ping_interval=None) as websocket:
-        await websocket.send(LLM_CONVERSATION.get_tokens())
+        await websocket.send(conversation.get_tokens())
 
         full_response = ''
         while True:
@@ -56,13 +60,18 @@ def do_image_inference(image_b64) -> ImageResult:
 
 @app.route('/')
 def index():
-    LLM_CONVERSATION.reset()
+    # create a conversation here
+    if 'default' not in LLM_CONVERSATION:
+        LLM_CONVERSATION['default'] = Dialog()
+    conversation = LLM_CONVERSATION.get('default')
+    conversation.reset()
     return render_template('index.html')
 
 
 @app.route('/clear')
 def clear():
-    LLM_CONVERSATION.reset()
+    conversation = LLM_CONVERSATION.get('default')
+    conversation.reset()
     return redirect('/')
 
 
@@ -78,6 +87,7 @@ def handle_disconnect():
 
 @socketio.on('submit')
 def handle_submit(data):
+    conversation = LLM_CONVERSATION.get('default')
     message = data.get('message', '')
     image = data.get('image', None)
     content = message
@@ -85,10 +95,10 @@ def handle_submit(data):
         image_result = do_image_inference(image)
         if image_result:
             content = f'Image: {image_result}\n{message}'
-    LLM_CONVERSATION.add_user_message(content)
+    conversation.add_user_message(content)
 
-    resp = asyncio.new_event_loop().run_until_complete(do_llm_inference())
-    LLM_CONVERSATION.add_assistant_message(resp)
+    resp = asyncio.new_event_loop().run_until_complete(do_llm_inference(conversation))
+    conversation.add_assistant_message(resp)
 
 
 if __name__ == '__main__':

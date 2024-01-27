@@ -12,6 +12,9 @@ import torch
 from PIL import Image
 from torchvision import transforms
 
+import path
+sys.path.append(path.Path(__file__).abspath().parent.parent)
+
 from typin import ImageResult
 
 image_classifier = None
