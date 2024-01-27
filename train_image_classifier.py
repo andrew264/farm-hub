@@ -10,13 +10,13 @@ from model import CNeXt
 
 train_data = './datasets/images/train'
 val_data = './datasets/images/valid'
-batch_size = 512
+batch_size = 256
 device = torch.device("cuda")
 
 
 def train_model(classifier: nn.Module, train_loader: DataLoader, val_loader: DataLoader, num_epochs=1):
     criterion = torch.nn.CrossEntropyLoss()
-    optimizer = optim.Adam(classifier.parameters(), lr=0.001, fused=True)
+    optimizer = optim.Adam(classifier.parameters(), lr=0.002, fused=True)
     for epoch in range(num_epochs):
         losses = []
         time_start = time.time()
@@ -41,22 +41,37 @@ def train_model(classifier: nn.Module, train_loader: DataLoader, val_loader: Dat
         print(f"Epoch {epoch + 1} took {time.time() - time_start} seconds")
 
         # Evaluate on validation set
-        with torch.no_grad():
-            correct = 0
-            total = 0
-            for images, labels in val_loader:
-                images = images.to(device)
-                labels = labels.to(device)
-                outputs = classifier(images)
-                _, predicted = torch.max(outputs.data, 1)
-                total += labels.size(0)
-                correct += (predicted == labels).sum().item()
-
-            accuracy = 100 * correct / total
-            print('Epoch [{}/{}], Validation Accuracy: {:.2f}%'.format(epoch + 1, num_epochs, accuracy))
+        validate_model(classifier, val_loader)
 
         # Save the fine-tuned model
         torch.save(classifier.state_dict(), 'models/convnext_small.pth')
+
+
+def validate_model(classifier, val_loader):
+    classifier.eval()
+    with torch.no_grad():
+        class_correct = list(0. for i in range(num_classes))  # Initialize correct counts for each class
+        class_total = list(0. for i in range(num_classes))  # Initialize total counts for each class
+        for images, labels in val_loader:
+            images = images.to(device)
+            labels = labels.to(device)
+            outputs = classifier(images)
+            _, predicted = torch.max(outputs.data, 1)
+            c = (predicted == labels).squeeze()  # Get correct predictions for each class
+            for i in range(num_classes):
+                label = labels[i]
+                class_correct[label] += c[i].item()
+                class_total[label] += 1
+
+        # Calculate and print accuracy for each class
+        for i in range(num_classes):
+            class_accuracy = 100 * class_correct[i] / class_total[i]
+            print('Accuracy of class {}: {:.2f} %'.format(i, class_accuracy))
+
+        # Calculate and print overall accuracy
+        overall_accuracy = 100 * sum(class_correct) / sum(class_total)
+        print('Accuracy of the model on the validation set: {:.2f} %'.format(overall_accuracy))
+    classifier.train()
 
 
 if __name__ == '__main__':
