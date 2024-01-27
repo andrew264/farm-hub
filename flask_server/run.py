@@ -9,7 +9,7 @@ import pytube
 import requests
 import websockets
 from flask import Flask
-from flask import render_template, redirect
+from flask import render_template, redirect, request
 from flask_socketio import SocketIO
 
 sys.path.append(path.Path(__file__).abspath().parent.parent)
@@ -69,13 +69,40 @@ def do_image_inference(image_b64) -> ImageResult:
 
 
 @app.route('/')
-def index():
+def landing():
+    return render_template('landingPage.html')
+
+@app.route('/llm-chat')
+def llm_chat():
     # create a conversation here
     if 'default' not in LLM_CONVERSATION:
         LLM_CONVERSATION['default'] = Dialog()
     conversation = LLM_CONVERSATION.get('default')
     conversation.reset()
     return render_template('index.html')
+
+@app.route('/register', methods=['GET', 'POST'])
+def register():
+    if request.method == 'POST':
+        username = request.form.get('username')
+        password = request.form.get('password')
+        if username not in users:
+            users[username] = password
+            return redirect('/login')
+        else:
+            return "Username already exists!"
+    return render_template('register.html')
+
+@app.route('/login', methods=['GET', 'POST'])
+def login():
+    if request.method == 'POST':
+        username = request.form.get('username')
+        password = request.form.get('password')
+        if users.get(username) == password:
+            return "Logged in successfully!"
+        else:
+            return "Invalid username or password!"
+    return render_template('login.html')
 
 
 @app.route('/clear')

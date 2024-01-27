@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/login.css') }}">
+</head>
+<body>
+    <div class="main">
+    <div class="container">
+        <input type="checkbox" id="register_toggle">
+        <div class="slider">
+          <form class="form">
+            <span class="title">Login</span>
+            <div class="form_control">
+              <input type="text" class="input" required="">
+              <label class="label">Username</label>
+            </div>
+            <div class="form_control">
+              <input type="password" class="input" required="">
+              <label class="label">Password</label>
+            </div>
+            <button>Login</button>
+      
+            <span class="bottom_text">Don't have an account? <label for="register_toggle" class="swtich">Sign Up</label> </span>
+          </form>
+          <form class="form">
+            <span class="title">Sign Up</span>
+            <div class="form_control">
+              <input type="text" class="input" required="">
+              <label class="label">Username</label>
+            </div>
+            <div class="form_control">
+              <input type="email" class="input" required="">
+              <label class="label">Email</label>
+            </div>
+            <div class="form_control">
+              <input type="password" class="input" required="">
+              <label class="label">Password</label>
+            </div>
+            <button>Sign Up</button>
+      
+            <span class="bottom_text">Already have an account? <label for="register_toggle" class="swtich">Sign In</label> </span>
+          </form>
+          </div>
+      </div>
+    </div>
+</body>
+</html>
