@@ -9,6 +9,8 @@ submitButton.addEventListener('click', async (e) => {
     e.preventDefault();
     let imageSrc = null;
 
+    const language = document.getElementById('opts').value;
+    console.log(language);
     const imageFile = image.files[0];
     if (imageFile) {
         imageSrc = await loadImage(imageFile);
@@ -72,8 +74,8 @@ function appendImage(imageSrc) {
     const imageElement = document.createElement('img');
     imageElement.src = imageSrc;
     imageElement.alt = `User image`;
-    imageElement.width = 300;
-    imageElement.height = 300;
+    imageElement.width = 200;
+    imageElement.height = 200;
     imageLi.appendChild(imageElement);
     chatContainer.appendChild(imageLi);
 }
@@ -99,11 +101,16 @@ function fetchBotMessage() {
                 return;
             }
             botElement.innerText += data;
+            scrollToBottom();
             resolve();
         });
     });
 }
 
+function scrollToBottom() {
+    chatContainer.scrollTop = chatContainer.scrollHeight;
+}
+  
 async function getUserName() {
     const response = await fetch('/get_username');
     const data = await response.json();
@@ -114,3 +121,17 @@ function adjustHeight(textarea) {
     textarea.style.height = "";  // Reset the height
     textarea.style.height = textarea.scrollHeight + "px";
 }
+
+
+// render username in "usrName" ID
+async function renderUsername() {
+    const username = await getUserName();
+    let doc = document.getElementById('usrName');
+    doc.innerHTML = 'hello ,' + username;
+    doc.style.fontSize = 'small';
+    doc.style.display = 'flex';
+    doc.style.alignItems = 'center';
+    doc.style.justifyContent = 'center';
+}
+
+renderUsername();

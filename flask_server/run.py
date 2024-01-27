@@ -159,6 +159,7 @@ def handle_submit(data):
         return redirect('/login')
     message = data.get('message', '')
     image = data.get('image', None)
+    opts = data.get('opts', 'English')
     content = message
     conversation.context = message
     if image:
