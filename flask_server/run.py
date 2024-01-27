@@ -8,8 +8,8 @@ import path
 import pytube
 import requests
 import websockets
-from flask import Flask
-from flask import render_template, redirect, request, flash
+from flask import Flask, jsonify
+from flask import render_template, redirect, request, flash, make_response
 from flask_socketio import SocketIO
 
 sys.path.append(path.Path(__file__).abspath().parent.parent)
@@ -20,11 +20,11 @@ app = Flask(__name__)
 app.secret_key = "akjhasbd,as"
 socketio = SocketIO(app)
 
+# modern user database
+users_path = os.path.join(os.path.dirname(__file__), 'static/assets/users.json')
 users = {}
-
-with open('flask_server/static/assets/users.json', 'r') as f:
+with open(users_path, 'r') as f:
     users = json.load(f)
-
 
 LLM_CONVERSATION: dict[str, Dialog] = {"default": Dialog()}
 
@@ -74,18 +74,20 @@ def do_image_inference(image_b64) -> ImageResult:
             result = ImageResult.from_json(resp.json())
             return result
 
+
 @app.route('/')
 def landing():
     return render_template('landingPage.html')
 
+
 @app.route('/llm-chat')
 def llm_chat():
-    # create a conversation here
-    if 'default' not in LLM_CONVERSATION:
-        LLM_CONVERSATION['default'] = Dialog()
-    conversation = LLM_CONVERSATION.get('default')
-    conversation.reset()
+    username = request.cookies.get('username', None)
+    if username is None:
+        return redirect('/login')
+    LLM_CONVERSATION[username] = Dialog()
     return render_template('index.html')
+
 
 @app.route('/register', methods=['GET', 'POST'])
 def register():
@@ -95,13 +97,16 @@ def register():
 
         if username not in users:
             users[username] = password
-            with open('flask_server/static/assets/users.json', 'w') as f:
-                json.dump(users, f)
+            # update users.json
+            with open(users_path, 'w') as f_:
+                json.dump(users, f_, indent=4)
+
             return redirect('/login')
         else:
             flash("Username already exists!")
             return redirect('/register')
     return render_template('register.html')
+
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
@@ -109,12 +114,22 @@ def login():
         username = request.form.get('username')
         password = request.form.get('password')
         if users.get(username) == password:
+            # create a cookie
+            resp = make_response(redirect('/llm-chat'))
+            resp.set_cookie('username', username, max_age=60 * 60)
+
             flash("You were successfully logged in")
-            return redirect('/llm-chat')
+            return resp
 
         else:
             return "Invalid username or password!"
     return render_template('login.html')
+
+
+@app.route('/get_username')
+def get_username():
+    username = request.cookies.get('username')
+    return jsonify({'username': username})
 
 
 @app.route('/clear')
@@ -133,9 +148,13 @@ def handle_connect():
 def handle_disconnect():
     print("client socket disconnected")
 
+
 @socketio.on('submit')
 def handle_submit(data):
-    conversation = LLM_CONVERSATION.get('default')
+    username = request.cookies.get('username', None)
+    if username is None:
+        return redirect('/login')
+    conversation = LLM_CONVERSATION.get(username)
     message = data.get('message', '')
     image = data.get('image', None)
     content = message

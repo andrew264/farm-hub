@@ -32,16 +32,16 @@ submitButton.addEventListener('click', async (e) => {
 });
 
 function readURL(input) {
-    if (input.files && input.files[0]) {  
-      var reader = new FileReader();
-      reader.onload = function (e) { 
-        document.querySelector("#img").setAttribute("src",e.target.result);
-        document.querySelector("#img").style.display = "block";
-    };
+    if (input.files && input.files[0]) {
+        var reader = new FileReader();
+        reader.onload = function (e) {
+            document.querySelector("#img").setAttribute("src", e.target.result);
+            document.querySelector("#img").style.display = "block";
+        };
 
-      reader.readAsDataURL(input.files[0]); 
+        reader.readAsDataURL(input.files[0]);
     }
-  }
+}
 
 function submitToSocket(message, image) {
     socket.emit('submit', {'message': message, 'image': image});
@@ -103,3 +103,10 @@ function fetchBotMessage() {
         });
     });
 }
+
+async function getUserName() {
+    const response = await fetch('/get_username');
+    const data = await response.json();
+    return data.username;
+}
+
