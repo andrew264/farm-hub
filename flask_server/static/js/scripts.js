@@ -82,6 +82,8 @@ function createBotMessage() {
     const messageElement = document.createElement('li');
     messageElement.className = 'bot'
     messageElement.innerText = ''
+    messageElement.markdown = '1'
+
     chatContainer.appendChild(messageElement);
     return messageElement;
 }
@@ -91,7 +93,6 @@ function fetchBotMessage() {
 
     return new Promise((resolve) => {
         socket.on('content', function (data) {
-            botElement.innerText.replaceAll('</s>', '')
             if (data === '//EOS//') {
                 resolve();
                 socket.off('content');

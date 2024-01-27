@@ -10,7 +10,7 @@ from types_and_constants import WS_EOS
 
 engine = None
 path = "/mnt/d/Llama-2-7B-Chat-AWQ"
-sampling_params = SamplingParams(temperature=0.8, top_p=0.95, max_tokens=256)
+sampling_params = SamplingParams(temperature=0.8, top_p=0.95, max_tokens=512)
 
 
 async def handle_client(websocket: websockets.WebSocketServerProtocol, path: str = None):
