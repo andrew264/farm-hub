@@ -42,6 +42,12 @@ IMAGE_SERVER_PORT = config['image-server']['port']
 IMAGE_SERVER_URI = f'http://{IMAGE_SERVER_HOST}:{IMAGE_SERVER_PORT}'
 
 
+EMBED_TEMPLATE = """<iframe width="560" height="315" src="https://www.youtube.com/embed/{video_id}"
+title="YouTube video player" frameborder="0"
+allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+allowfullscreen></iframe> """
+
+
 async def do_llm_inference(conversation: Dialog) -> str:
     async with websockets.connect(LLM_SERVER_URI, ping_interval=None) as websocket:
         await websocket.send(conversation.get_tokens())
@@ -59,12 +65,21 @@ async def do_llm_inference(conversation: Dialog) -> str:
     return full_response
 
 
-def get_video_link(context: str) -> Optional[str]:
+@app.route('/get_video_link')
+def get_video_link() -> str:
+    username = request.cookies.get('username', None)
+    if username is None:
+        return ""
+    conversation = LLM_CONVERSATION.get(username, None)
+    if conversation is None:
+        return ""
+    context = conversation.context + " " + conversation.image_class
     res = pytube.contrib.search.Search(context)
     if res.results:
-        return 'https://www.youtube.com/embed/' + res.results[0].video_id
+        video_id = res.results[0].video_id
+        return EMBED_TEMPLATE.format(video_id=video_id)
     else:
-        return None
+        return ""
 
 
 def do_image_inference(image_b64) -> ImageResult:
