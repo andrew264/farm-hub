@@ -154,7 +154,9 @@ def handle_submit(data):
     username = request.cookies.get('username', None)
     if username is None:
         return redirect('/login')
-    conversation = LLM_CONVERSATION.get(username)
+    conversation = LLM_CONVERSATION.get(username, None)
+    if conversation is None:
+        return redirect('/login')
     message = data.get('message', '')
     image = data.get('image', None)
     content = message
