@@ -5,46 +5,37 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='css/login.css') }}">
+    <script src="https://unpkg.com/@lottiefiles/lottie-player@latest/dist/lottie-player.js"></script>
 </head>
 <body>
     <div class="main">
     <div class="container">
         <input type="checkbox" id="register_toggle">
         <div class="slider">
-          <form class="form">
+          <form class="form" action="/login" method="post">
             <span class="title">Login</span>
             <div class="form_control">
-              <input type="text" class="input" required="">
+              <input name="username" id="loginUsr" type="text" class="input" required="">
               <label class="label">Username</label>
             </div>
             <div class="form_control">
-              <input type="password" class="input" required="">
+              <input name="password" id="loginPwd" type="password" class="input" required="">
               <label class="label">Password</label>
             </div>
-            <button>Login</button>
+            <button type="submit">Login</button>
       
-            <span class="bottom_text">Don't have an account? <label for="register_toggle" class="swtich">Sign Up</label> </span>
-          </form>
-          <form class="form">
-            <span class="title">Sign Up</span>
-            <div class="form_control">
-              <input type="text" class="input" required="">
-              <label class="label">Username</label>
-            </div>
-            <div class="form_control">
-              <input type="email" class="input" required="">
-              <label class="label">Email</label>
-            </div>
-            <div class="form_control">
-              <input type="password" class="input" required="">
-              <label class="label">Password</label>
-            </div>
-            <button>Sign Up</button>
-      
-            <span class="bottom_text">Already have an account? <label for="register_toggle" class="swtich">Sign In</label> </span>
+            <span class="bottom_text">Don't have an account? <a href="/register" for="register_toggle" class="swtich">Sign Up</label> </a>
           </form>
           </div>
       </div>
+
+      <div class="loginBG" style="margin: 0; padding: 0;">
+        <lottie-player src="{{url_for('static', filename = './assets/Nature.json')}}" background="transparent" speed="1" direction="1" playMode="normal" loop autoplay></lottie-player>
+    </div>
+    <a 
+    href="/"
+    style="display: absolute; color: aliceblue; top: 0; left: 0; margin: 10px;"
+    >Go Back</a>
     </div>
 </body>
 </html>

@@ -9,7 +9,7 @@ import pytube
 import requests
 import websockets
 from flask import Flask
-from flask import render_template, redirect, request
+from flask import render_template, redirect, request, flash
 from flask_socketio import SocketIO
 
 sys.path.append(path.Path(__file__).abspath().parent.parent)
@@ -17,7 +17,14 @@ sys.path.append(path.Path(__file__).abspath().parent.parent)
 from typin import Dialog, WS_EOS, ImageResult
 
 app = Flask(__name__)
+app.secret_key = "akjhasbd,as"
 socketio = SocketIO(app)
+
+users = {}
+
+with open('flask_server/static/assets/users.json', 'r') as f:
+    users = json.load(f)
+
 
 LLM_CONVERSATION: dict[str, Dialog] = {"default": Dialog()}
 
@@ -67,7 +74,6 @@ def do_image_inference(image_b64) -> ImageResult:
             result = ImageResult.from_json(resp.json())
             return result
 
-
 @app.route('/')
 def landing():
     return render_template('landingPage.html')
@@ -85,12 +91,16 @@ def llm_chat():
 def register():
     if request.method == 'POST':
         username = request.form.get('username')
-        password = request.form.get('password')
+        password = request.form.get('pwd')
+
         if username not in users:
             users[username] = password
+            with open('flask_server/static/assets/users.json', 'w') as f:
+                json.dump(users, f)
             return redirect('/login')
         else:
-            return "Username already exists!"
+            flash("Username already exists!")
+            return redirect('/register')
     return render_template('register.html')
 
 @app.route('/login', methods=['GET', 'POST'])
@@ -99,7 +109,9 @@ def login():
         username = request.form.get('username')
         password = request.form.get('password')
         if users.get(username) == password:
-            return "Logged in successfully!"
+            flash("You were successfully logged in")
+            return redirect('/llm-chat')
+
         else:
             return "Invalid username or password!"
     return render_template('login.html')
@@ -120,7 +132,6 @@ def handle_connect():
 @socketio.on('disconnect')
 def handle_disconnect():
     print("client socket disconnected")
-
 
 @socketio.on('submit')
 def handle_submit(data):

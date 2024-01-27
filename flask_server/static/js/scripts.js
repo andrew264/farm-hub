@@ -103,6 +103,3 @@ function fetchBotMessage() {
         });
     });
 }
-document.getElementById('image-icon').addEventListener('click', function () {
-    document.getElementById('image-add-button').click();
-});
