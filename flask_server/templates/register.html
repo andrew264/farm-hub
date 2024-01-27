@@ -8,38 +8,36 @@
     <script src="https://unpkg.com/@lottiefiles/lottie-player@latest/dist/lottie-player.js"></script>
 </head>
 <body>
-    <div class="main">
+<div class="main">
     <div class="container">
         <input type="checkbox" id="register_toggle">
         <div class="slider">
-            <form class="form" method="post" action="/register" >
+            <form class="form" method="post" action="/register">
                 <span class="title">Sign Up</span>
                 <div class="form_control">
-                  <input name="username" id="regUsr" type="text" class="input" required="">
-                  <label class="label">Username</label>
+                    <input name="username" id="regUsr" type="text" class="input" required="">
+                    <label class="label">Username</label>
                 </div>
                 <div class="form_control">
-                  <input name="email" id="regMail" type="email" class="input" required="">
-                  <label class="label">Email</label>
+                    <input name="pwd" id="regPwd" type="password" class="input" required="">
+                    <label class="label">Password</label>
                 </div>
-                <div class="form_control">
-                  <input name="pwd" id="regPwd" type="password" class="input" required="">
-                  <label class="label">Password</label>
-                </div>
-                <button type="submit" >Sign Up</button>
-                <span class="bottom_text">Already have an account? <a href="/login" for="register_toggle" class="swtich">Sign In</a> </span>
-              </form>
-          </form>
-          </div>
-      </div>
+                <button type="submit">Sign Up</button>
+                <span class="bottom_text">Already have an account? <a href="/login" for="register_toggle"
+                                                                      class="swtich">Sign In</a> </span>
+            </form>
+            </form>
+        </div>
+    </div>
 
-      <div class="loginBG" style="margin: 0; padding: 0;">
-        <lottie-player src="{{url_for('static', filename = './assets/Nature.json')}}" background="transparent" speed="1" direction="1" playMode="normal" loop autoplay></lottie-player>
+    <div class="loginBG" style="margin: 0; padding: 0;">
+        <lottie-player src="{{url_for('static', filename = './assets/Nature.json')}}" background="transparent" speed="1"
+                       direction="1" playMode="normal" loop autoplay></lottie-player>
     </div>
-    <a 
-    href="/"
-    style="display: absolute; color: aliceblue; top: 0; left: 0; margin: 10px;"
+    <a
+            href="/"
+            style="display: absolute; color: aliceblue; top: 0; left: 0; margin: 10px;"
     >Go Back</a>
-    </div>
+</div>
 </body>
 </html>
