@@ -13,7 +13,8 @@
 .container {
     display: flex;
     flex-direction: column;
-    height: 100%;
+    min-width: 100vw;
+    height: 100vh;
 }
 
 
@@ -91,16 +92,27 @@ li {
 
 
 .formContainer {
-    transform: translateX(50%);
+    margin: 0 auto;
     bottom: 0;
     display: flex;
     justify-content: space-between;
-    width: 50vw;
+    width: 80vw;
     background-color: #1C1A1C;
     margin-bottom: 1.5vh;
+    border-radius: 10px;
+}
+
+.formContainer div{
+    display: flex;
+    align-items: center;
+    padding-top: 10px;
+    padding-bottom: 10px;
+
 }
 
 #file-input-label {
+    display: flex;
+    align-items: center;
     font-size: 1.3em;
     padding: 0 5px;
     border: 1px solid black;
@@ -143,4 +155,19 @@ li {
 
 #submitButton {
     margin-right: 2vw;
+    display: flex;
+    align-items: center;
+}
+
+#message{
+    width: 50vw;
+    height: 100%;
+    border: none;
+    background-color: #1C1A1C;
+    color: white;
+    font-size: 1.3em;
+    padding: 0 5px;
+    border-radius: 4%;
+    resize: none;
+    outline: none;
 }

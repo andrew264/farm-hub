@@ -110,3 +110,7 @@ async function getUserName() {
     return data.username;
 }
 
+function adjustHeight(textarea) {
+    textarea.style.height = "";  // Reset the height
+    textarea.style.height = textarea.scrollHeight + "px";
+}

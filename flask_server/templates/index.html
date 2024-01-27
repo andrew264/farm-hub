@@ -18,8 +18,8 @@
 <body>
 <div class="container">
     <header class="header-bar">
-        Farm-HUB
-        <a class="reset-button" style="" href="/clear">
+        Farm-Hub
+        <a class="reset-button" href="/clear">
             <span class="material-symbols-outlined">delete</span>
         </a>
     </header>
@@ -28,7 +28,7 @@
     </div>
     <div class="formContainer">
         <div class="imgContainer">
-            <input onchange="readURL(this)" accept="image/*" id="image-add-button" title="none" type="file">
+            <input oninput="adjustHeight(this)" onchange="readURL(this)" accept="image/*" id="image-add-button" title="none" type="file">
             <label id="file-input-label" for="image-add-button">
                 <span class="material-symbols-outlined">
                     add_photo_alternate
@@ -37,11 +37,13 @@
             <img id="img" src="" alt="" width="75px" height="75px">
         </div>
         <div>
-            <input
+            <textarea
+                    rows="1"
                     class=""
                     autocomplete="off"
                     name="text"
-                    id="message" type="text" id="messageInput" placeholder="Type message here...">
+                    oninput="adjustHeight(this)"
+                    id="message" type="text" id="messageInput" placeholder="Type message here..."></textarea>
         </div>
         <div>
             <button id="submitButton">
