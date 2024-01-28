@@ -50,6 +50,10 @@ function submitToSocket(message, image, language) {
     console.log('Submitting to socket');
     socket.emit('submit', {'message': message, 'image': image, 'language': language});
     console.log('Submitted to socket');
+
+    // Remove the image
+    document.querySelector("#img").setAttribute("src", "");
+    document.querySelector("#img").style.display = "none";
 }
 
 function loadImage(imageFile) {
