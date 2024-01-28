@@ -56,7 +56,7 @@
                     autocomplete="off"
                     name="text"
                     oninput="adjustHeight(this)"
-                    id="message" type="text" id="messageInput" placeholder="Type message here..."></textarea>
+                    id="message" type="text" placeholder="Type message here..."></textarea>
         </div>
         <div>
             <button id="submitButton">
@@ -66,7 +66,7 @@
             </button>
         </div>
     </div>
-    <lottie-player class="lot" src="{{url_for('static', filename = 'assets/chat.json')}}" loop autoplay/>
+    <lottie-player resizeMode = "center" class="lot" src="{{url_for('static', filename = 'assets/chat.json')}}" loop autoplay/>
 </div>
 <script src="{{ url_for('static', filename='js/scripts.js') }}"></script>
 </body>

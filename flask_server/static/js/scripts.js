@@ -157,15 +157,40 @@ function adjustHeight(textarea) {
 }
 
 
+// send when enter key is pressed
+userInput.addEventListener("keyup", function (event) {
+    if (event.keyCode === 13) {
+        event.preventDefault();
+        submitButton.click();
+    }
+});
+
 // render username in "usrName" ID
 async function renderUsername() {
     const username = await getUserName();
     let doc = document.getElementById('usrName');
-    doc.innerHTML = 'Hello, ' + username + '!';
-    doc.style.fontSize = 'small';
-    doc.style.display = 'flex';
-    doc.style.alignItems = 'center';
-    doc.style.justifyContent = 'center';
+
+    function updateUsernameDisplay() {
+        if (window.innerWidth < 768) {
+            doc.innerHTML = 'Hello, ' + '<br/>' + username + '!';
+            doc.style.fontSize = 'small';
+            doc.style.display = 'flex';
+            doc.style.alignItems = 'center';
+            return;
+        }
+
+        doc.innerHTML = 'Hello, ' + username + '!';
+        doc.style.fontSize = 'small';
+        doc.style.display = 'flex';
+        doc.style.alignItems = 'center';
+        doc.style.justifyContent = 'center';
+    }
+
+    // Call the function once to set the initial state
+    updateUsernameDisplay();
+
+    // Update the display whenever the window is resized
+    window.addEventListener('resize', updateUsernameDisplay);
 }
 
 renderUsername();
