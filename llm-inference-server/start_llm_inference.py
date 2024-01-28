@@ -56,7 +56,7 @@ async def start_server(host: str, port: int):
 
 if __name__ == "__main__":
     print("Loading LLM...")
-    engine_args = AsyncEngineArgs(model=path, max_model_len=1440, quantization="awq", block_size=8)
+    engine_args = AsyncEngineArgs(model=path, max_model_len=1440, quantization="awq", block_size=8, enforce_eager=True)
     engine = AsyncLLMEngine.from_engine_args(engine_args)
     print("Starting server...")
     with open('config.json') as f:

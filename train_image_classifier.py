@@ -1,3 +1,4 @@
+import os
 import time
 
 import torch
@@ -16,7 +17,7 @@ device = torch.device("cuda")
 
 def train_model(classifier: nn.Module, train_loader: DataLoader, val_loader: DataLoader, num_epochs=1):
     criterion = torch.nn.CrossEntropyLoss()
-    optimizer = optim.Adam(classifier.parameters(), lr=5e-4, fused=True)
+    optimizer = optim.Adam(classifier.parameters(), lr=1e-4, fused=True)
     for epoch in range(num_epochs):
         losses = []
         time_start = time.time()
@@ -71,6 +72,8 @@ def validate_model(classifier, val_loader):
         # Calculate and print overall accuracy
         overall_accuracy = 100 * sum(class_correct) / sum(class_total)
         print('Accuracy of the model on the validation set: {:.2f} %'.format(overall_accuracy))
+        print(f"Total correct: {sum(class_correct)}")
+        print(f"Total: {sum(class_total)}")
     classifier.train()
 
 
@@ -102,4 +105,8 @@ if __name__ == '__main__':
 
     model = CNeXt(num_classes=num_classes)
     model.to(dtype=torch.float32, device=device)
-    train_model(model, train_loader=train_dataset, val_loader=val_dataset, num_epochs=5)
+    if os.path.exists('models/convnext_small.pth'):
+        model.load_state_dict(torch.load('models/convnext_small.pth'))
+        print("Loaded model from disk")
+    train_model(model, train_loader=train_dataset, val_loader=val_dataset, num_epochs=1)
+    # validate_model(model, val_dataset)

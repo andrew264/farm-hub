@@ -130,4 +130,4 @@ class Dialog:
                 dialog[-1]["role"] == Role.USER
         ), f"Last message must be from user, got {dialog[-1]['role']}"
         dialog_tokens += f"{BOS}{B_INST} {(dialog[-1]['content']).strip()} {E_INST}",
-        return ''.join(dialog_tokens)
+        return ''.join(dialog_tokens) + "As an Agriculture expert,"

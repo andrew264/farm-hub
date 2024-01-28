@@ -179,6 +179,8 @@ def handle_submit(data):
         conversation.image_class = image_result.class_name
         if image_result:
             content = f'Image: {image_result}\n{message}'
+    if image is None and message != "":
+        conversation.image_class = ""
     conversation.add_user_message(content)
 
     resp = asyncio.new_event_loop().run_until_complete(do_llm_inference(conversation))
@@ -188,4 +190,4 @@ def handle_submit(data):
 if __name__ == '__main__':
     print(os.getcwd())
 
-    socketio.run(app, host='0.0.0.0', port=5000, debug=True, allow_unsafe_werkzeug=True)
+    socketio.run(app, host='0.0.0.0', port=5000, debug=False, allow_unsafe_werkzeug=True)
