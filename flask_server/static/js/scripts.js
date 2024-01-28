@@ -4,7 +4,9 @@ const submitButton = document.getElementById('submitButton');
 const userInput = document.getElementById('message');
 const image = document.getElementById('image-add-button');
 const langSelect = document.getElementById('language-select');
-const socket = io();
+const socket = io({
+    maxHttpBufferSize: 1e8
+});
 
 submitButton.addEventListener('click', async (e) => {
     e.preventDefault();
@@ -45,16 +47,41 @@ function readURL(input) {
 }
 
 function submitToSocket(message, image, language) {
+    console.log('Submitting to socket');
     socket.emit('submit', {'message': message, 'image': image, 'language': language});
+    console.log('Submitted to socket');
 }
 
 function loadImage(imageFile) {
     return new Promise((resolve) => {
         const reader = new FileReader();
+
         reader.onload = (event) => {
-            const imageSrc = event.target.result;
-            resolve(imageSrc);
+            const image = new Image();
+            image.onload = () => {
+                const maxWidth = 512;
+                let newWidth = image.width;
+                let newHeight = image.height;
+
+                if (image.width > maxWidth) {
+                    newWidth = maxWidth;
+                    newHeight = (image.height * maxWidth) / image.width;
+                }
+
+                const canvas = document.createElement("canvas");
+                canvas.width = newWidth;
+                canvas.height = newHeight;
+
+                const ctx = canvas.getContext("2d");
+                ctx.drawImage(image, 0, 0, newWidth, newHeight);
+
+                const resizedImageSrc = canvas.toDataURL(imageFile.type, 0.5);
+                resolve(resizedImageSrc);
+            };
+
+            image.src = event.target.result;
         };
+
         reader.readAsDataURL(imageFile);
     });
 }
