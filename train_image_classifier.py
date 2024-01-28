@@ -16,7 +16,7 @@ device = torch.device("cuda")
 
 def train_model(classifier: nn.Module, train_loader: DataLoader, val_loader: DataLoader, num_epochs=1):
     criterion = torch.nn.CrossEntropyLoss()
-    optimizer = optim.Adam(classifier.parameters(), lr=0.002, fused=True)
+    optimizer = optim.Adam(classifier.parameters(), lr=5e-4, fused=True)
     for epoch in range(num_epochs):
         losses = []
         time_start = time.time()
@@ -102,4 +102,4 @@ if __name__ == '__main__':
 
     model = CNeXt(num_classes=num_classes)
     model.to(dtype=torch.float32, device=device)
-    train_model(model, train_loader=train_dataset, val_loader=val_dataset, num_epochs=3)
+    train_model(model, train_loader=train_dataset, val_loader=val_dataset, num_epochs=5)
