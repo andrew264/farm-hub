@@ -75,7 +75,7 @@ function loadImage(imageFile) {
                 const ctx = canvas.getContext("2d");
                 ctx.drawImage(image, 0, 0, newWidth, newHeight);
 
-                const resizedImageSrc = canvas.toDataURL(imageFile.type, 0.5);
+                const resizedImageSrc = canvas.toDataURL(imageFile.type, 0.8);
                 resolve(resizedImageSrc);
             };
 
