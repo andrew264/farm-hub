@@ -40,7 +40,8 @@ IMAGE_SERVER_HOST = config['image-server']['host']
 IMAGE_SERVER_PORT = config['image-server']['port']
 IMAGE_SERVER_URI = f'http://{IMAGE_SERVER_HOST}:{IMAGE_SERVER_PORT}'
 
-EMBED_TEMPLATE = "<a href='{url}' target='_blank'>{title}</a>"
+EMBED_TEMPLATE = ("<span>Here is a recommended video:&nbsp;</span><a href='{url}' target='_blank'>{title}</a>"
+                  "<span>&nbsp;I hope it helps.</span>")
 
 
 async def do_llm_inference(conversation: Dialog) -> str:
