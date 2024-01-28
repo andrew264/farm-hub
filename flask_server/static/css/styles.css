@@ -14,6 +14,7 @@
 * {
     margin: 0;
     padding: 0;
+    transition: 0.5s ease-in-out;
 }
 
 .container {
@@ -208,4 +209,33 @@ li {
     justify-content: space-between;
     align-items: center;
     margin-right: 2vw;
+}
+
+/* Tablet View */
+@media only screen and (max-width: 768px){
+
+    .container{
+        height: 100dvh;
+        position: relative;
+        overflow: hidden !important;
+    }
+
+
+    #language-select {
+        width: 15px;
+    }
+
+    #language-select option {
+        font-size: 0.8em;
+    }
+
+    #message {
+        font-size: 15px;
+    }
+
+    .lot{
+        left: 0 ;
+        width: 300px;
+        bottom: -5vh;
+    }
 }

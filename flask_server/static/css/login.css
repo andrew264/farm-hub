@@ -134,3 +134,27 @@ form button:active {
     right: -15vw;
     z-index: -1;
 }
+
+.loginBGM lottie-player {
+    display: none;
+}
+
+/* tab view */
+@media only screen and (max-width: 768px) {
+
+    .container #register_toggle:checked + .slider {
+        transform: translateX(0%);
+    }
+    .loginBG lottie-player {
+        display: none;
+    }
+
+    .loginBGM lottie-player {
+        display: block;
+        position: absolute;
+        transform: translate(-50%, -50%);
+        top: 20vh;
+        z-index: -1;
+    }
+
+}

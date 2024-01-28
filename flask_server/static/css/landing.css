@@ -160,3 +160,9 @@ button:hover .star-6 {
     z-index: -1;
 }
   
+
+/* Tablet View */
+
+@media only screen and (max-width: 768px){
+    
+}
