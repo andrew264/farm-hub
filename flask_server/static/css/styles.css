@@ -87,21 +87,21 @@ li {
 }
 
 .bot {
-    background-color: #1C1A1C;
+    background-color: #ffb700;
 
-    color: white;
+    color: black;
     display: flex;
     align-items: center;
     box-shadow: .4em .4em black;
 }
 
 .bot a {
-    color: #1da1f2;
+    color: #1d59f2;
 }
 
 .user {
 
-    background-color: #1da1f2;
+    background-color: #c6aa58;
     box-shadow: .4em .4em black;
 }
 
