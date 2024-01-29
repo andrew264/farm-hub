@@ -3,7 +3,7 @@ const chatContainer = document.getElementById('chat-container');
 const submitButton = document.getElementById('submitButton');
 const userInput = document.getElementById('message');
 const image = document.getElementById('image-add-button');
-const langSelect = document.getElementById('language-select');
+// const langSelect = document.getElementById('language-select');
 const socket = io({
     maxHttpBufferSize: 1e8
 });
@@ -26,7 +26,7 @@ submitButton.addEventListener('click', async (e) => {
     }
     const userMessage = userInput.value;
     userInput.value = '';
-    submitToSocket(userMessage, imageSrc, langSelect.value);
+    submitToSocket(userMessage, imageSrc, 'English');
 
     if (userMessage !== '') {
         appendMessage(userMessage);
@@ -48,7 +48,7 @@ function readURL(input) {
 
 function submitToSocket(message, image, language) {
     console.log('Submitting to socket');
-    socket.emit('submit', {'message': message, 'image': image, 'language': language});
+    socket.emit('submit', {'message': message, 'image': image, 'language': 'English'});
     console.log('Submitted to socket');
 
     // Remove the image
@@ -184,7 +184,7 @@ async function renderUsername() {
         }
 
         doc.innerHTML = 'Hello, ' + username + '!';
-        doc.style.fontSize = 'small';
+        doc.style.fontSize = 'large';
         doc.style.display = 'flex';
         doc.style.alignItems = 'center';
         doc.style.justifyContent = 'center';
