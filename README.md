@@ -1,4 +1,14 @@
-# farm-hub
+
+# Farm Hub: A Large Language Model AI-powered Disease Detection for Agriculture
+
+
+Farm Hub is a large language model (LLM) designed to empower farmers with AI-powered insights and disease detection capabilities. Leveraging Meta's Finetuned Lllama-2-7b model, Farm Hub delivers over 90% accuracy in identifying plant diseases through image recognition.
+
+## Authors
+- [@andrew264](https://www.github.com/andrew264)
+- [@ShadowConYT](https://www.github.com/ShadowConYT)
+- [@spidy566](https://www.github.com/spidy566)
+
 
 ## Setup
 
